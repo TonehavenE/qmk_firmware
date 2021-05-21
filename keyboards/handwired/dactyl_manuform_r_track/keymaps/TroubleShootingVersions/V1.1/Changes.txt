@@ -1,0 +1,3 @@
+In this version of the keymap, I adjusted only the base COLEMAKDHM layer; replaced the main Alphanumeric codes with vanilla colemak 
+and the dynamic macro functions with numbers. 
+I also adjusted the right thumb cluster, but not the left.

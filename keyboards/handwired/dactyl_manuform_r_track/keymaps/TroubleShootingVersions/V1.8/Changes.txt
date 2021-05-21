@@ -1,0 +1,11 @@
+Everything has remained functional thus far; we are nearing the end. However, the QWERTY key(column 3, row 10, I believe) is constantly being actuated.
+I am going to enable debugging again to see if it is a firmware or matrix issue. I did reflow that joint recently.
+
+CONSOLE_ENABLE = yes
+COMMAND_ENABLE = no
+
+Hmm. these changes produced a corrupt HEX. I don't know why.
+
+Instead, this version is the removal of all TAP_DANCE Related firmware.
+
+TRIUMPH! IT'S COMPLETE AND COMPLETELY FUNCTIONAL!

@@ -1,0 +1,2 @@
+I changed the Rules.MK and Config.H to support Unicode. I then defined the DASH unicode character. I changed the left thumb cluster to include that character and a few others
+instead of Qurn's Tapdance keycodes. I put RAISE and LOWER on Layer Taps. This is one of the deciding moments. 
