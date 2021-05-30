@@ -514,10 +514,6 @@ enum quantum_keycodes {
     // RGB underglow/matrix (continued)
     RGB_MODE_TWINKLE,
 
-    ONESHOT_ENABLE,
-    ONESHOT_DISABLE,
-    ONESHOT_TOGGLE,
-
     // always leave at the end
     SAFE_RANGE
 };
