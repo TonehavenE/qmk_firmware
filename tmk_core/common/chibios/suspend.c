@@ -24,9 +24,7 @@
 #    include "rgblight.h"
 #endif
 
-#ifdef LED_MATRIX_ENABLE
-#    include "led_matrix.h"
-#endif
+
 #ifdef RGB_MATRIX_ENABLE
 #    include "rgb_matrix.h"
 #endif
@@ -60,9 +58,6 @@ void suspend_power_down(void) {
     backlight_set(0);
 #endif
 
-#ifdef LED_MATRIX_ENABLE
-    led_matrix_task();
-#endif
 #ifdef RGB_MATRIX_ENABLE
     rgb_matrix_task();
 #endif

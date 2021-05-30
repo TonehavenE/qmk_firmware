@@ -514,7 +514,11 @@ enum quantum_keycodes {
     // RGB underglow/matrix (continued)
     RGB_MODE_TWINKLE,
 
-    // Start of custom keycode range for keyboards and keymaps - always leave at the end
+    ONESHOT_ENABLE,
+    ONESHOT_DISABLE,
+    ONESHOT_TOGGLE,
+
+    // always leave at the end
     SAFE_RANGE
 };
 
@@ -617,13 +621,12 @@ enum quantum_keycodes {
 
 #define KC_DELT KC_DELETE  // Del key (four letter code)
 
-// Modified keycode aliases
+// Aliases
 #define C(kc) LCTL(kc)
 #define S(kc) LSFT(kc)
 #define A(kc) LALT(kc)
 #define G(kc) LGUI(kc)
 
-// Deprecated - do not use
 #define F(kc) (QK_FUNCTION | (kc))
 #define M(kc) (QK_MACRO | (kc))
 #define MACROTAP(kc) (QK_MACRO | (FUNC_TAP << 8) | (kc))

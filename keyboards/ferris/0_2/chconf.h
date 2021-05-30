@@ -23,6 +23,7 @@
 
 #define CH_CFG_ST_FREQUENCY 10000
 
+<<<<<<< HEAD:keyboards/ferris/0_2/chconf.h
 #define CH_CFG_OPTIMIZE_SPEED FALSE
 
 #define CH_CFG_USE_REGISTRY TRUE
@@ -36,5 +37,8 @@
 #define CH_CFG_USE_MESSAGES TRUE
 
 #define CH_CFG_USE_MAILBOXES TRUE
+=======
+#define CH_CFG_ST_TIMEDELTA 0
+>>>>>>> pr/8591:keyboards/durgod/boards/DURGOD_STM32_F070/chconf.h
 
 #include_next <chconf.h>

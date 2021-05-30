@@ -200,6 +200,7 @@ extern layer_state_t layer_state;
 #    include "usbpd.h"
 #endif
 
+
 #ifdef ENCODER_ENABLE
 #    include "encoder.h"
 #endif
