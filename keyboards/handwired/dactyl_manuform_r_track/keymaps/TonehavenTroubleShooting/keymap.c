@@ -17,12 +17,8 @@
 /***************************
  * Usual defines
  **************************/
-
 #include QMK_KEYBOARD_H
-
-#ifdef THUMBSTICK_ENABLE
-#    include "thumbstick.h"
-#endif
+#include "print.h"
 
 #define _COLEMAK 0
 #define _ADJUST 1
@@ -161,6 +157,7 @@ void on_mouse_button(uint8_t mouse_button, bool pressed) {
 /***************************
  * Combos
  **************************/
+
 enum combo_events {
     RS_MOUSE,
     ST_MOUSE,
@@ -178,17 +175,9 @@ combo_t key_combos[COMBO_COUNT] = {
     [RT_MOUSE] = COMBO_ACTION(rtm_combo),
 };
 
-#define MODS_SHIFT (get_mods() & MOD_BIT(KC_LSHIFT) || get_mods() & MOD_BIT(KC_RSHIFT))
-#define SEND_CAP_STRING(str, capitalized) if (MODS_SHIFT) { \
-                                            clear_mods(); \
-                                            SEND_STRING(capitalized); \
-                                          } else { \
-                                            SEND_STRING(str); \
-                                          }
-
 void process_combo_event(uint16_t combo_index, bool pressed) {
     switch(combo_index) {
-        case RS_MOUSE:
+    case RS_MOUSE:
         on_mouse_button(MOUSE_BTN2, pressed);
         break;
     case ST_MOUSE:
@@ -305,7 +294,20 @@ _______, _______ , KC_F1 , KC_F2 , KC_F3 , _______,                 _______, ___
 
 
 };
+void keyboard_post_init_user(void) {
+  // Customise these values to desired behaviour
+  debug_enable=true;
+  debug_matrix=true;
+}
 
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  // If console is enabled, it will print the matrix position and status of each key pressed
+	#ifdef CONSOLE_ENABLE
+		print("The Tantalus Keyboard has been intalized. Scanning for keypresses");
+    	uprintf("KL: kc: 0x%04X, col: %u, row: %u, pressed: %b, time: %u, interrupt: %b, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
+	#endif 
+  return true;
+}
 /***************************
  * Trackball handling
  **************************/

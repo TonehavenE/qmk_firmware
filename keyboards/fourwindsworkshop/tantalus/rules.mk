@@ -16,10 +16,10 @@ BOOTLOADER = atmel-dfu
 #   the appropriate keymap folder that will get included automatically
 #
 BOOTMAGIC_ENABLE = lite     # Virtual DIP switch configuration
-MOUSEKEY_ENABLE = no        # Mouse keys
+MOUSEKEY_ENABLE = yes        # Mouse keys
 EXTRAKEY_ENABLE = yes       # Audio control and System control
 CONSOLE_ENABLE = no         # Console for debug
-COMMAND_ENABLE = yes        # Commands for debug and configuration
+COMMAND_ENABLE = no         # Commands for debug and configuration
 NKRO_ENABLE = no            # Nkey Rollover - if this doesn't work, see here: https://github.com/tmk/tmk_keyboard/wiki/FAQ#nkro-doesnt-work
 BACKLIGHT_ENABLE = no       # Enable keyboard backlight functionality
 MIDI_ENABLE = no            # MIDI controls
@@ -33,7 +33,4 @@ LTO_ENABLE = yes
 # Add trackball support
 POINTING_DEVICE_ENABLE = yes
 
-SRC += qurn/pmw3360.c
-# if Drashna, uncomment the following two lines:
-#SRC += drashna/pmw3360.c
-#QUANTUM_LIB_SRC += pointer_transport.c serial.c spi_master.c
+SRC += pmw3360/pmw3360.c

@@ -3,8 +3,8 @@
 #include "config_common.h"
 
 /* USB Device descriptor parameter */
-#define VENDOR_ID       0xFEED
-#define PRODUCT_ID      0x6060
+#define VENDOR_ID       0x5448 //TH
+#define PRODUCT_ID      0x5453 //TS
 #define DEVICE_VER      0x0001
 #define MANUFACTURER    Tonehaven
 #define PRODUCT         Tantalus
@@ -17,7 +17,6 @@
 /* key matrix pins */
 #define MATRIX_ROW_PINS { D6, D4, D5, D3 }
 #define MATRIX_COL_PINS { C7, C6, B6, B5, B4, F0, F7, F6, F5, F4, F1 }
-#define UNUSED_PINS
 
 /* COL2ROW or ROW2COL */
 #define DIODE_DIRECTION COL2ROW
@@ -30,6 +29,8 @@
 
 /* Locking resynchronize hack */
 #define LOCKING_RESYNC_ENABLE
+
+#define POLLING true
 
 // Bootmagic Settings
 #define BOOTMAGIC_LITE_ROW 0
@@ -55,6 +56,7 @@
 /* Combo Settings */ 
 
 #define COMBO_TERM 40 
+
 
 
 

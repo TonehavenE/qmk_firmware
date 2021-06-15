@@ -55,7 +55,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define USE_I2C
 #define SPLIT_USB_DETECT
 #define MASTER_RIGHT
-// #define COMBO_COUNT 38
+#define COMBO_COUNT 3
 
 // Bootmagic Settingst
 #define BOOTMAGIC_LITE_ROW 0
