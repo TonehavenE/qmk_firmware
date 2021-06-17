@@ -16,7 +16,7 @@ BOOTLOADER = atmel-dfu
 #   the appropriate keymap folder that will get included automatically
 #
 BOOTMAGIC_ENABLE = lite     # Virtual DIP switch configuration
-MOUSEKEY_ENABLE = yes        # Mouse keys
+MOUSEKEY_ENABLE = no        # Mouse keys
 EXTRAKEY_ENABLE = yes       # Audio control and System control
 CONSOLE_ENABLE = no         # Console for debug
 COMMAND_ENABLE = no         # Commands for debug and configuration
@@ -29,7 +29,7 @@ BLUETOOTH_ENABLE = no       # Enable Bluetooth with the Adafruit EZ-Key HID
 RGBLIGHT_ENABLE = no        # Enable WS2812 RGB underlight. 
 COMBO_ENABLE = yes
 LTO_ENABLE = yes
-
+DEBOUNCE_TYPE = eager_pk
 # Add trackball support
 POINTING_DEVICE_ENABLE = yes
 
