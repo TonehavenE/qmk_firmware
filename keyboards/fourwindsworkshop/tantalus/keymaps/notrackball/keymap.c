@@ -114,7 +114,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 enable_xcase_with(OSM(MOD_LSFT));
             }
             return false;
-          /*
+          
           case SCRL_MD:
             if (record->event.pressed) {
                 track_mode = scroll_mode;
@@ -157,7 +157,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case CRT_UP:
           carret_threshold = carret_threshold + CRT_STEP;
           return false;
-        // */
+        
         default:
             return true;  // Process all other keycodes normally
     }
