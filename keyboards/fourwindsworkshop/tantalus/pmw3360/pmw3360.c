@@ -155,7 +155,6 @@ void pmw_init(void) {
     // // set initial CPI resolution
     // ////pmw_write(Config1, 0x15); // was this
 	pmw_write(Config1, 0x07);
-    pmw_write(Angle_Tune, -0x0A);
     pmw_end();
     wait_ms(10);
 }
