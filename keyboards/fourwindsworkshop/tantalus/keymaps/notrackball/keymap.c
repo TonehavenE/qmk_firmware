@@ -2,7 +2,10 @@
 #include "features/casemodes.h"
 #include "features/combo.h"
 // #include "features/trackball.c"
-#include "print.h"
+#include "features/casemodes.c"
+#ifdef CONSOLE_ENABLE
+    #include "print.h"
+#endif 
 
 #define _COLEMAK 0
 #define _NAV 1
@@ -10,13 +13,13 @@
 #define _FUNC 3
 #define _NSL 4
 #define _NSSL 5
+#define _GAME 6
 
 /***************************
  * Trackball related defines
  **************************/
 #include "pointing_device.h"
 #include "../../pmw3360/pmw3360.h"
-// #include "C:/Users/Eben/qmk_firmware/keyboards/fourwindsworkshop/tantalus/qurn/pmw3360.h"
 
 uint8_t track_mode = 0; // 0 Mousecursor; 1 arrowkeys/carret; 2 scrollwheel; 3 sound/brightness
 #define cursor_mode 0
@@ -37,10 +40,10 @@ uint16_t carret_threshold_inte = 400; // in integration mode higher threshold
 
 #define regular_smoothscroll_factor 8
 bool smooth_scroll = true;
-uint8_t scroll_threshold = 8 / regular_smoothscroll_factor; // divide if started smooth
+uint8_t scroll_threshold = 150 / regular_smoothscroll_factor; // divide if started smooth
 uint16_t scroll_threshold_inte = 1200 / regular_smoothscroll_factor;
 
-uint16_t cursor_multiplier = 130;   // adjust cursor speed
+uint16_t cursor_multiplier = 200;   // adjust cursor speed
 uint16_t cursor_multiplier_inte = 20;
 #define CPI_STEP 10
 
@@ -68,13 +71,14 @@ void on_mouse_button(uint8_t mouse_button, bool pressed) {
 #define KC_RST RESET
 
 enum custom_keycodes {
-  KC_INTE = SAFE_RANGE,
-  CAPSWORD ,
+  CAPSWORD = SAFE_RANGE,
+  KC_INTE,
   CAMELCASE,
   SLASHCASE,
   SNAKECASE,
   KC_CPI_DOWN ,
   KC_CPI_STD  ,
+  KC_CPI_LOW  ,
   KC_CPI_UP   ,
   KC_SMO_SC   ,
   KC_CURSORMODE  ,
@@ -82,13 +86,15 @@ enum custom_keycodes {
   KC_CARRETMODE  ,
   KC_CRT_UP   , 
   KC_CRT_DOWN ,
+  KC_CRT_STD  , 
+  KC_CRT_LOW  ,
 };
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[_COLEMAK] = LAYOUT(
-		KC_Q, KC_W        , KC_F        , KC_P        , KC_G  , KC_RBRC, KC_J, KC_L        , KC_U        , KC_Y        , KC_SCLN, 
-		KC_A, LALT_T(KC_R), LCTL_T(KC_S), LSFT_T(KC_T), KC_D  , KC_LBRC, KC_H, RSFT_T(KC_N), RCTL_T(KC_E), RALT_T(KC_I), KC_O   , 
-		LT_Z, KC_X        , KC_C        , KC_V        , KC_B  , KC_LPRN, KC_K, KC_M        , KC_COMM     , KC_DOT      , KC_SLSH, 
-				                LT_TAB      , LT_SPC      , LT_ENT, KC_RPRN,       LT_BSPC
+		KC_Q, KC_W        , KC_F        , KC_P        , KC_G  , KC_CPI_STD, KC_J, KC_L        , KC_U        , KC_Y        , KC_QUOT, 
+		KC_A, LALT_T(KC_R), LCTL_T(KC_S), LSFT_T(KC_T), KC_D  , KC_CRT_STD, KC_H, RSFT_T(KC_N), RCTL_T(KC_E), RALT_T(KC_I), KC_O   , 
+		LT_Z, KC_X        , KC_C        , KC_V        , KC_B  , KC_CRT_LOW, KC_K, KC_M        , KC_COMM     , KC_DOT      , RGUI_T(KC_SLSH), 
+				            LT_TAB      , LT_SPC      , LT_ENT, KC_CPI_LOW,       LT_BSPC
 		),
   [_NAV] = LAYOUT(
     _______, _______, _______, CAMELCASE, SLASHCASE, KC_RST, KC_INSERT, C(KC_LEFT)  , KC_UP  , C(KC_RIGHT) , _______, 
@@ -97,8 +103,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                       _______, _______  , _______  , KC_RST,            KC_DEL
     ),
   [_MOUSE] = LAYOUT(
-    _______, _______, _______, _______, _______, KC_RST, KC_CPI_UP  , KC_SCROLLMODE, KC_CURSORMODE, KC_CARRETMODE, KC_CPI_STD , 
-    KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, _______, KC_RST, KC_CPI_DOWN, KC_BTN1, KC_BTN2, KC_BTN3, KC_CRT_UP  , 
+    _______, _______, _______, _______, _______, KC_RST, KC_CPI_UP  , KC_SCROLLMODE, KC_CURSORMODE, KC_CARRETMODE, KC_CRT_UP , 
+    KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, _______, KC_RST, KC_CPI_DOWN, KC_MS_L, KC_MS_U, KC_MS_D, KC_MS_R  , 
     _______, _______, _______, _______, _______, KC_RST, KC_WH_L , KC_WH_U, KC_WH_D, KC_WH_R, KC_CRT_DOWN, 
                       _______, _______, _______, KC_RST,          _______
     ),
@@ -109,16 +115,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                _______, _______, _______, KC_RST,          _______
     ),
   [_NSL] = LAYOUT(
-    _______, KC_7, KC_8, KC_9, _______, KC_RST, _______, _______, _______, _______, _______, 
-    _______, KC_4, KC_5, KC_6, _______, KC_RST, _______, KC_RSFT, KC_RCTL, KC_RALT, KC_RGUI, 
-    _______, KC_1, KC_2, KC_3, _______, KC_RST, _______, _______, _______, _______, _______, 
-                _______, KC_0, _______, KC_RST,          _______
+    _______, KC_7, KC_8, KC_9, _______, TG(_GAME), _______, _______, _______, _______, _______, 
+    _______, KC_4, KC_5, KC_6, _______, TG(_GAME), _______, KC_RSFT, KC_RCTL, KC_RALT, KC_RGUI, 
+    _______, KC_1, KC_2, KC_3, _______, TG(_GAME), _______, _______, _______, _______, _______, 
+                _______, KC_0, _______, TG(_GAME),          _______
     ),
   [_NSSL] = LAYOUT(
     _______, S(KC_7), S(KC_8), S(KC_9), _______, KC_RST, _______, _______, _______, _______, _______, 
     _______, S(KC_4), S(KC_5), S(KC_6), _______, KC_RST, _______, KC_RSFT, KC_RCTL, KC_RALT, KC_RGUI, 
     _______, S(KC_1), S(KC_2), S(KC_3), _______, KC_RST, _______, _______, _______, _______, _______, 
              _______, S(KC_0), _______,          KC_RST,          _______
+    ),
+  [_GAME] = LAYOUT(
+    KC_6   , KC_1, KC_2, KC_3, KC_4, TG(_GAME), _______, CMB_TOG, _______, _______, _______, 
+    KC_TAB , KC_Q, KC_W, KC_E, KC_R, KC_5     , _______, KC_BTN1, KC_BTN3, KC_BTN2, KC_RGUI, 
+    KC_LCTRL, KC_A, KC_S, KC_D, KC_F, KC_T     , _______, _______, _______, _______, _______, 
+        KC_ESC, KC_LALT, KC_SPACE,    TG(_GAME),         _______
     )
 
 };
@@ -196,8 +208,8 @@ void handle_pointing_device_modes(void){
             cur_factor = cursor_multiplier_inte;
         else
             cur_factor = cursor_multiplier;
-        mouse_report.x = CLAMP_HID( sensor_x * cur_factor / 100);
-        mouse_report.y = CLAMP_HID(-sensor_y * cur_factor / 100);
+        mouse_report.x = CLAMP_HID( sensor_x * cur_factor / 150);
+        mouse_report.y = CLAMP_HID(-sensor_y * cur_factor / 150);
     } else {
         // accumulate movement until threshold reached
         cum_x += sensor_x;
@@ -207,7 +219,7 @@ void handle_pointing_device_modes(void){
                 cur_factor = carret_threshold_inte;
             else
                 cur_factor = carret_threshold;
-            tap_tb(KC_RIGHT, KC_LEFT, KC_NO, KC_NO);
+            tap_tb(KC_RIGHT, KC_LEFT, KC_UP, KC_DOWN);
 
         } else if(track_mode == scroll_mode) {
                 if (integration_mode)
@@ -262,92 +274,25 @@ void pointing_device_task(void) {
         handle_pointing_device_modes();
     }
 #endif
-/*
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  // If console is enabled, it will print the matrix position and status of each key pressed
-   #ifdef CONSOLE_ENABLE
-      uprintf("KL: kc: 0x%04X, col: %u, row: %u, pressed: %b, time: %u, interrupt: %b, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
-   #endif 
-  return true;
 
-   if (!process_case_modes(keycode, record)) {
-        return false;
-    }
-
-    // Regular user keycode case statement
-    switch (keycode) {
-        case CAPSWORD:
-            if (record->event.pressed) {
-                toggle_caps_word();
-            }
-            return false;
-        case SNAKECASE:
-            // Turn spaces into _, e.g., this_is_how_it_would_look
-            if (record->event.pressed) {
-                enable_xcase_with(KC_UNDS);
-            }
-            return false;
-         case SLASHCASE:
-            // Turn spaces into / e.g. this/is/how/it/would/look
-            if (record->event.pressed) {
-                enable_xcase_with(KC_SLSH);
-            }
-            return false;
-         case CAMELCASE:
-            // Turn spaces into shifting the next key, e.g., thisIsHowItWouldLook
-            if (record->event.pressed) {
-                enable_xcase_with(OSM(MOD_LSFT));
-            }
-            return false;
-          
-          case SCRL_MD:
-            if (record->event.pressed) {
-                track_mode = scroll_mode;
-                } else {
-                }
-            return false;
-
-        case CURS_MD:
-            if (record->event.pressed) {
-                track_mode = cursor_mode;
-                } else {
-                }
-            return false;
-
-        case CART_MD:
-            if (record->event.pressed) {
-                track_mode = carret_mode;
-                } else {
-                }
-            return false;
-        
-        case KC_CPI_DOWN:
-          if (cursor_multiplier > KC_CPI_STEP)
-            cursor_multiplier = cursor_multiplier - KC_CPI_STEP;
-          return false;
-
-        case KC_CPI_STD:
-          cursor_multiplier = 160;
-          return false;
-
-        case KC_CPI_UP:
-          cursor_multiplier = cursor_multiplier + KC_CPI_STEP;
-          return false;
-
-        case CRT_DOWN:
-        if (carret_threshold > CRT_STEP)
-            carret_threshold = carret_threshold - CRT_STEP;
-          return false;
-        
-        case CRT_UP:
-          carret_threshold = carret_threshold + CRT_STEP;
-          return false;
-        
-        default:
-            return true;  // Process all other keycodes normally
-    }
+uint16_t get_combo_term(uint16_t index, combo_t *combo) {
+  switch(index) {
+    case WR_TWO:
+    case FS_THREE:
+    case PT_FOUR:
+    case GD_FIVE:
+    case JH_SIX:
+    case LN_SEVEN:
+    case UE_EIGHT:
+    case YI_NINE:
+      return 100; // give myself more time for these ones 
+    case QA_ONE:
+    case QUOTEO_ZERO:
+        return 200;
+    default:
+      return COMBO_TERM;
+  }
 }
-*/
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
     if(!process_record_user(keycode, record)) {
         return false;
@@ -403,7 +348,11 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
             return false;
 
         case KC_CPI_STD:
-            cursor_multiplier = 160;
+            cursor_multiplier = 200;
+            return false;
+
+        case KC_CPI_LOW:
+            cursor_multiplier = 150;
             return false;
 
         case KC_CPI_UP:
@@ -430,6 +379,15 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
         case KC_CRT_UP:
           carret_threshold = carret_threshold + CRT_STEP;
           return false;
+
+        case KC_CRT_STD:
+            carret_threshold = 60;
+            return false;
+
+        case KC_CRT_LOW:
+            carret_threshold = 30;
+            return false;
+
         default:
             return true;
     }
@@ -440,13 +398,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
    #ifdef CONSOLE_ENABLE
       uprintf("KL: kc: 0x%04X, col: %u, row: %u, pressed: %b, time: %u, interrupt: %b, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
    #endif 
-  return true;
+   return true; 
 
-   if (!process_case_modes(keycode, record)) {
-        return false;
-    }
-
-    // Regular user keycode case statement
     switch (keycode) {
         case CAPSWORD:
             if (record->event.pressed) {
@@ -469,7 +422,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             // Turn spaces into shifting the next key, e.g., thisIsHowItWouldLook
             if (record->event.pressed) {
                 enable_xcase_with(OSM(MOD_LSFT));
-            }
+            } 
             return false;
+
+        default:
+            return true;
     }
 }

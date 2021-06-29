@@ -36,14 +36,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 //right
-#define MATRIX_ROW_PINS { F7, F6, F5, F4, C6, D4 }
-#define MATRIX_COL_PINS { D7, B4, B5, B6, B7, D6 }
+// #define MATRIX_ROW_PINS { F7, F6, F5, F4, C6, D4 }
+// #define MATRIX_COL_PINS { D7, B4, B5, B6, B7, D6 }
 
 //left
-// #define MATRIX_COL_PINS { D4, C6, D7, E6, B4, B5 }
-// #define MATRIX_ROW_PINS { F6, F7, B1, B3, B2, B6 }
-// #define MATRIX_ROW_PINS_RIGHT { F7, F6, F5, F4, C6, D4  }
-// #define MATRIX_COL_PINS_RIGHT { D7, B4, B5, B6, B7, D6 }
+#define MATRIX_COL_PINS { D4, C6, D7, E6, B4, B5 }
+#define MATRIX_ROW_PINS { F6, F7, B1, B3, B2, B6 }
+#define MATRIX_ROW_PINS_RIGHT { F7, F6, F5, F4, C6, D4  }
+#define MATRIX_COL_PINS_RIGHT { D7, B4, B5, B6, B7, D6 }
 
 /* COL2ROW, ROW2COL*/
 #define DIODE_DIRECTION COL2ROW
@@ -55,6 +55,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define USE_I2C
 #define SPLIT_USB_DETECT
 #define MASTER_RIGHT
+
+
 #define COMBO_COUNT 3
 
 // Bootmagic Settingst

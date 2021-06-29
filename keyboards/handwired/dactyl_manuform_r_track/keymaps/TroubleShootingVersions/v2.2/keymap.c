@@ -17,8 +17,8 @@
 /***************************
  * Usual defines
  **************************/
-
 #include QMK_KEYBOARD_H
+#include "print.h"
 
 #define _COLEMAK 0
 #define _ADJUST 1
@@ -64,7 +64,7 @@ bool smooth_scroll = true;
 uint8_t	scroll_threshold = 8 / regular_smoothscroll_factor;	// divide if started smooth
 uint16_t scroll_threshold_inte = 1200 / regular_smoothscroll_factor;
 
-uint16_t cursor_multiplier = 130;	// adjust cursor speed
+uint16_t cursor_multiplier = 200;	// adjust cursor speed
 uint16_t cursor_multiplier_inte = 20;
 #define CPI_STEP 10
 
@@ -157,6 +157,7 @@ void on_mouse_button(uint8_t mouse_button, bool pressed) {
 /***************************
  * Combos
  **************************/
+
 enum combo_events {
     RS_MOUSE,
     ST_MOUSE,
@@ -164,7 +165,7 @@ enum combo_events {
 };
 
 // Mouse Combos
-const uint16_t PROGMEM rsm_combo[] = {KC_R, KC_S, COMBO_END};
+const uint16_t PROGMEM rsm_combo[] = {LALT_T(KC_R), LCTL_T(KC_S), COMBO_END};
 const uint16_t PROGMEM stm_combo[] = {KC_S, KC_T, COMBO_END};
 const uint16_t PROGMEM rtm_combo[] = {KC_R, KC_T, COMBO_END};
 
@@ -174,17 +175,9 @@ combo_t key_combos[COMBO_COUNT] = {
     [RT_MOUSE] = COMBO_ACTION(rtm_combo),
 };
 
-#define MODS_SHIFT (get_mods() & MOD_BIT(KC_LSHIFT) || get_mods() & MOD_BIT(KC_RSHIFT))
-#define SEND_CAP_STRING(str, capitalized) if (MODS_SHIFT) { \
-                                            clear_mods(); \
-                                            SEND_STRING(capitalized); \
-                                          } else { \
-                                            SEND_STRING(str); \
-                                          }
-
 void process_combo_event(uint16_t combo_index, bool pressed) {
     switch(combo_index) {
-        case RS_MOUSE:
+    case RS_MOUSE:
         on_mouse_button(MOUSE_BTN2, pressed);
         break;
     case ST_MOUSE:
@@ -221,10 +214,10 @@ enum custom_keycodes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_COLEMAK] = LAYOUT_5x6(
-KC_GESC         , KC_1 ,   KC_2 , KC_3, KC_4         , KC_5   ,               KC_6    ,    KC_7        , KC_8      , KC_9      , KC_0        , KC_EQUAL  ,
-LALT_T(KC_MINUS), KC_Q ,   KC_W , KC_F, LSFT_T(KC_P) , KC_G   ,               KC_J    ,    LSFT_T(KC_L), KC_U      , KC_Y      , KC_QUOTE    , KC_SCOLON ,
-KC_LSPO         , KC_A ,   KC_R , KC_S, KC_T         , KC_D   ,               KC_H    ,    KC_N        , KC_E      , KC_I      , KC_O        , KC_RSPC   ,
-KC_LCTL         , KC_Z ,   KC_X , KC_C, KC_V         , KC_B   ,               KC_K    ,    KC_M        , KC_COMM   , KC_DOT    , KC_SLASH    , LGUI_T(KC_MINUS),
+KC_GESC         , KC_1 ,   KC_2        , KC_3 		 , KC_4         , KC_5   ,               KC_6    ,    KC_7        , KC_8        , KC_9        , KC_0        , KC_EQUAL  ,
+LGUI_T(KC_MINUS), KC_Q ,   KC_W        , KC_F 		 , KC_P         , KC_G   ,               KC_J    ,    KC_L        , KC_U        , KC_Y        , KC_QUOTE    , KC_SCOLON ,
+KC_LSPO         , KC_A ,   LALT_T(KC_R), LCTL_T(KC_S), LSFT_T(KC_T) , KC_D   ,               KC_H    ,    RSFT_T(KC_N), RCTL_T(KC_E), RALT_T(KC_I), KC_O        , KC_RSPC   ,
+KC_LCTL         , KC_Z ,   KC_X        , KC_C 		 , KC_V         , KC_B   ,               KC_K    ,    KC_M        , KC_COMM     , KC_DOT      , KC_SLASH    , LGUI_T(KC_MINUS),
                            KC_LBRC,KC_RBRC,                                         TG(_ADJUST), TG(_LOWER),
                                        LT(_UNICODE, KC_TAB), LT(_RAISE, KC_SPACE),  _______, KC_BSPC,
                                        LT(_MATH, KC_EQUAL) , DM_PLY1         ,      _______, LT(_FUNCTION, KC_ENT),
@@ -237,8 +230,8 @@ KC_TAB , KC_Q  , KC_W  , KC_E  , KC_R  , KC_T  ,                        _______,
 KC_LSFT, KC_A  , KC_S  , KC_D  , KC_F  , KC_G  ,                        _______, KC_BTN1, KC_BTN3, KC_BTN2, _______, _______,
 KC_LCTL, KC_Z  , KC_X  , KC_C  , KC_V  , KC_B  ,                        _______, _______, _______, _______, _______, _______,
                           _______, _______,                                          _______, _______,
-                                            KC_LALT, KC_R    ,               _______, _______,
-                                            _______, KC_SPACE,               _______, _______,
+                                            KC_LALT, KC_SPACE,               _______, _______,
+                                            _______, KC_R,               _______, _______,
                                             _______, _______,               _______, _______
 ),
 
@@ -301,7 +294,20 @@ _______, _______ , KC_F1 , KC_F2 , KC_F3 , _______,                 _______, ___
 
 
 };
+void keyboard_post_init_user(void) {
+  // Customise these values to desired behaviour
+  debug_enable=true;
+  debug_matrix=true;
+}
 
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  // If console is enabled, it will print the matrix position and status of each key pressed
+	#ifdef CONSOLE_ENABLE
+		print("The Tantalus Keyboard has been intalized. Scanning for keypresses");
+    	uprintf("KL: kc: 0x%04X, col: %u, row: %u, pressed: %b, time: %u, interrupt: %b, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
+	#endif 
+  return true;
+}
 /***************************
  * Trackball handling
  **************************/
@@ -497,7 +503,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 			return false;
 
 		case KC_CPI_STD:
-			cursor_multiplier = 160;
+			cursor_multiplier = 150;
 			return false;
 
 		case KC_CPI_UP:
