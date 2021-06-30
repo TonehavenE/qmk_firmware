@@ -1,0 +1,1 @@
+I added my definitions for Cursormode, scrollmode and carret mode; changed the _LOWER layer to reflect my definition of the mouse layer.

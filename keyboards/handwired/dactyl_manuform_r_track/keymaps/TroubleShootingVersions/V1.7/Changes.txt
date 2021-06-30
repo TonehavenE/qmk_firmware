@@ -1,0 +1,2 @@
+After a succesful implementation of the UNICODE Layer, I'm going to add the other two remaining ones: FUNCTION and QWERTY. I put QWERTY as layer 1(just above COLEMAK) and then FUNCTION as layer 6,
+since it is the least important. 
