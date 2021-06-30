@@ -10,8 +10,7 @@ MCU = atmega32u4
 #   ATmega32A    bootloadHID
 #   ATmega328P   USBasp
 
-BOOTLOADER = halfkay # right
-#BOOTLOADER = caterina # left
+BOOTLOADER = caterina # left
 
 # Build Options
 #   change yes to no to disable

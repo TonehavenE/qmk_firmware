@@ -220,7 +220,7 @@ KC_LSPO         , KC_A ,   KC_R , KC_S, KC_T         , KC_D   ,               KC
 KC_LCTL         , KC_Z ,   KC_X , KC_C, KC_V         , KC_B   ,               KC_K    ,    KC_M        , KC_COMM   , KC_DOT    , KC_SLASH    , LGUI_T(KC_MINUS),
                            KC_LBRC,KC_RBRC,                                         TG(_ADJUST), TG(_LOWER),
                                        LT(_UNICODE, KC_TAB), LT(_RAISE, KC_SPACE),  _______, KC_BSPC,
-                                       LT(_MATH, KC_EQUAL) , DM_PLY1         ,      _______, LT(_FUNCTION, KC_ENT),
+                                       LT(_MATH, KC_EQUAL) , _______,      _______, LT(_FUNCTION, KC_ENT),
                                        KC_CURSORMODE       , KC_CARRETMODE   ,      KC_DEL, KC_BSLASH
 ),
 
@@ -248,9 +248,9 @@ _______, _______, _______, _______, _______, _______,                       ____
 ),
 
 [_RAISE] = LAYOUT_5x6(
-KC_GRAVE, _______ , _______ , _______ , _______ , RESET  ,                 RESET  , KC_DELETE, _______ ,KC_PGUP, DM_REC1, DM_REC2,
-_______ , _______ , _______ , _______ , _______ , _______,                 _______, KC_INSERT, KC_UP   ,KC_PGDN, DM_PLY1, DM_PLY2,
-_______ , KC_LGUI , KC_LALT , KC_LCTL , KC_LSFT , _______,                 _______, KC_LEFT  , KC_DOWN ,KC_RIGHT, DM_RSTP, DM_RSTP,
+KC_GRAVE, _______ , _______ , _______ , _______ , RESET  ,                 RESET  , KC_DELETE, _______ ,KC_PGUP, _______, _______,
+_______ , _______ , _______ , _______ , _______ , _______,                 _______, KC_INSERT, KC_UP   ,KC_PGDN, _______, _______,
+_______ , KC_LGUI , KC_LALT , KC_LCTL , KC_LSFT , _______,                 _______, KC_LEFT  , KC_DOWN ,KC_RIGHT, _______, _______,
 _______ , _______ , KC_ALGR , _______ , _______ , _______,                 _______, _______, _______ ,_______, _______, _______,
                              _______,_______,                                KC_HOME,KC_END,
                                         _______,_______,             _______,_______,
