@@ -77,8 +77,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Tapping_Term in MS
 #define TAPPING_TERM 200
 
-// Retro Tapping allows better usage of dual use keys
-// #define RETRO_TAPPING
 
 
 

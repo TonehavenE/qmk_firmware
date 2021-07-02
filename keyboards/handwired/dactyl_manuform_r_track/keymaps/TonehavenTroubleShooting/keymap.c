@@ -20,10 +20,6 @@
 
 #include QMK_KEYBOARD_H
 
-#ifdef THUMBSTICK_ENABLE
-#    include "thumbstick.h"
-#endif
-
 #define _COLEMAK 0
 #define _ADJUST 1
 #define _LOWER 2
@@ -68,7 +64,7 @@ bool smooth_scroll = true;
 uint8_t	scroll_threshold = 8 / regular_smoothscroll_factor;	// divide if started smooth
 uint16_t scroll_threshold_inte = 1200 / regular_smoothscroll_factor;
 
-uint16_t cursor_multiplier = 130;	// adjust cursor speed
+uint16_t cursor_multiplier = 150;	// adjust cursor speed
 uint16_t cursor_multiplier_inte = 20;
 #define CPI_STEP 10
 
@@ -225,24 +221,34 @@ enum custom_keycodes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_COLEMAK] = LAYOUT_5x6(
-KC_GESC         , KC_1 ,   KC_2 , KC_3, KC_4         , KC_5   ,               KC_6    ,    KC_7        , KC_8      , KC_9      , KC_0        , KC_EQUAL  ,
-LALT_T(KC_MINUS), KC_Q ,   KC_W , KC_F, LSFT_T(KC_P) , KC_G   ,               KC_J    ,    LSFT_T(KC_L), KC_U      , KC_Y      , KC_QUOTE    , KC_SCOLON ,
-KC_LSPO         , KC_A ,   KC_R , KC_S, KC_T         , KC_D   ,               KC_H    ,    KC_N        , KC_E      , KC_I      , KC_O        , KC_RSPC   ,
-KC_LCTL         , KC_Z ,   KC_X , KC_C, KC_V         , KC_B   ,               KC_K    ,    KC_M        , KC_COMM   , KC_DOT    , KC_SLASH    , LGUI_T(KC_MINUS),
-                           KC_LBRC,KC_RBRC,                                         TG(_ADJUST), TG(_LOWER),
+KC_GESC         , KC_1 ,   KC_2 , KC_3, KC_4, KC_5   ,               KC_6,    KC_7, KC_8   , KC_9  , KC_0        , KC_EQUAL  ,
+LALT_T(KC_MINUS), KC_Q ,   KC_W , KC_F, KC_P, KC_G   ,			     KC_J,    KC_L, KC_U   , KC_Y  , KC_QUOTE    , KC_SCOLON ,
+KC_LSPO         , KC_A ,   KC_R , KC_S, KC_T, KC_D   ,               KC_H,    KC_N, KC_E   , KC_I  , KC_O        , KC_RSPC   ,
+KC_LCTL         , KC_Z ,   KC_X , KC_C, KC_V, KC_B   ,               KC_K,    KC_M, KC_COMM, KC_DOT, KC_SLASH    , LGUI_T(KC_MINUS),
+                           LGUI_T(KC_LBRC),RGUI_T(KC_RBRC),                                         TG(_ADJUST), TG(_LOWER),
                                        LT(_UNICODE, KC_TAB), LT(_RAISE, KC_SPACE),  _______, KC_BSPC,
                                        LT(_MATH, KC_EQUAL) , _______,      _______, LT(_FUNCTION, KC_ENT),
                                        KC_CURSORMODE       , KC_CARRETMODE   ,      KC_DEL, KC_BSLASH
 ),
 
 [_ADJUST] = LAYOUT_5x6(
+/*
 KC_ESC , KC_1  , KC_2  , KC_3  , KC_4  , KC_5  ,                        _______, _______, _______, _______, _______, _______,
 KC_TAB , KC_Q  , KC_W  , KC_E  , KC_R  , KC_T  ,                        _______, _______, _______, _______, _______, _______,
 KC_LSFT, KC_A  , KC_S  , KC_D  , KC_F  , KC_G  ,                        _______, KC_BTN1, KC_BTN3, KC_BTN2, _______, _______,
 KC_LCTL, KC_Z  , KC_X  , KC_C  , KC_V  , KC_B  ,                        _______, _______, _______, _______, _______, _______,
                           _______, _______,                                          _______, _______,
-                                            KC_LALT, KC_R    ,               _______, _______,
-                                            _______, KC_SPACE,               _______, _______,
+                                            KC_LALT, KC_SPACE,               _______, _______,
+                                            _______, KC_R,               _______, _______,
+                                            _______, _______,               _______, _______
+*/
+KC_ESC , KC_5, KC_1  , KC_2  , KC_3  , KC_4  ,                        _______, _______, _______, _______, _______, _______,
+KC_TAB , KC_C, KC_Q  , KC_W  , KC_E  , KC_R  ,                        _______, _______, _______, _______, _______, _______,
+KC_LSFT, KC_G, KC_A  , KC_S  , KC_D  , KC_F  ,                        _______, KC_BTN1, KC_BTN3, KC_BTN2, _______, _______,
+KC_LCTL, KC_B, KC_Z  , KC_X  , KC_C  , KC_V  ,                        _______, _______, _______, _______, _______, _______,
+                          _______, _______,                                          _______, _______,
+                                            KC_LALT, KC_SPACE,               _______, _______,
+                                            _______, KC_R,               _______, _______,
                                             _______, _______,               _______, _______
 ),
 
@@ -259,8 +265,8 @@ _______, _______, _______, _______, _______, _______,                       ____
 ),
 
 [_RAISE] = LAYOUT_5x6(
-KC_GRAVE, _______ , _______ , _______ , _______ , RESET  ,                 RESET  , KC_DELETE, _______ ,KC_PGUP, _______, _______,
-_______ , _______ , _______ , _______ , _______ , _______,                 _______, KC_INSERT, KC_UP   ,KC_PGDN, _______, _______,
+KC_GRAVE, _______ , _______ , _______ , _______ , RESET  ,                 RESET  , KC_DELETE, _______ ,KC_PGUP , _______, _______,
+_______ , _______ , _______ , _______ , _______ , _______,                 _______, KC_HOME  , KC_UP   ,KC_END  , _______, _______,
 _______ , KC_LGUI , KC_LALT , KC_LCTL , KC_LSFT , _______,                 _______, KC_LEFT  , KC_DOWN ,KC_RIGHT, _______, _______,
 _______ , _______ , KC_ALGR , _______ , _______ , _______,                 _______, _______, _______ ,_______, _______, _______,
                              _______,_______,                                KC_HOME,KC_END,
@@ -441,6 +447,20 @@ void pointing_device_task(void) {
 		handle_pointing_device_modes();
 	}
 #endif
+
+/***************************
+ * tapping term per key
+ **************************/
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case KC_LSPO:
+        	return TAPPING_TERM - 100;
+        case KC_RSPC:
+        	return TAPPING_TERM - 100;      
+        default:
+            return TAPPING_TERM;
+    }
+}
 
 /***************************
  * process_record_kb
