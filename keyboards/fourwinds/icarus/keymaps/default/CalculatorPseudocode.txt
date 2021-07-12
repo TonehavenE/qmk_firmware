@@ -1,0 +1,70 @@
+PSUEDOCODE:
+INPUT Buffer of characters, includng numbers and operators
+num1 = 0.00
+num2 = 0.00
+operator = ''
+num2_write == FALSE
+FOR item IN Buffer:
+	IF num2_write == FALSE:
+		IF item == INT & dotread == FALSE:
+			num1 += float(item)
+		ELSE IF item == INT & dot_read == TRUE:
+			num1 += float(item) / 10 # 0.item
+		ELSE IF item == SPACE:
+			num2_write = TRUE
+		ELSE IF item == PLUS:
+			operator = '+'
+			num2_write = TRUE
+		ELSE IF item == MINUS:
+			operator = '-'
+			num2_write = TRUE
+		ELSE IF item == DIVIDE:
+			operator = '/'
+			num2_write = TRUE
+		ELSE IF item == MULTIPLY:
+			operator = '*'
+			num2_write = TRUE
+		ELSE IF item == FINISH:
+			CALL SENDSTRING
+			BREAK
+		ELSE IF item == CALC:
+			CALL CALC
+		ELSE:
+			CONTINUE
+		
+	ELSE:
+		IF item == INT & dotread == FALSE:
+			num2 += float(item)
+		ELSE IF item == INT & dot_read == TRUE:
+			num2 += float(item) / 10 # 0.item
+		ELSE IF item == PLUS:
+			operator = '+'
+		ELSE IF item == MINUS:
+			operator = '-'
+		ELSE IF item == DIVIDE:
+			operator = '/'
+		ELSE IF item == MULTIPLY:
+			operator = '*'
+		ELSE IF item == FINISH:
+			CALL SENDSTRING
+			BREAK
+		ELSE:
+			CONTINUE
+FUNCTION SENDSTRING(num1, num2, operator):
+	IF num1 != 0.00 && num2 != 0.00:
+		IF operator = '+':
+			out_string = num1 + num2
+		ELSE IF operator = '-':
+			out_string = num1 - num2
+		ELSE IF operator = '/':
+			out_string = num1 / num2
+		ELSE IF operator = '*':
+			out_string = num1 * num2
+		ELSE: # Assume plus
+			out_string = num1 + num2
+	ELSE:
+		out_string = 'ERROR':
+	PRINT out_string
+	
+		
+		
