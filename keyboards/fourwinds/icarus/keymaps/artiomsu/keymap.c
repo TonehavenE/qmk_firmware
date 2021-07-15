@@ -127,21 +127,21 @@ enum custom_keycodes {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-    ortho_4x5(
+    LAYOUT_MACROPAD(
         KC_NUMLOCK, KC_KP_SLASH, KC_KP_ASTERISK, KC_KP_MINUS,
         KC_KP_7, KC_KP_8, KC_KP_9, KC_KP_PLUS,
         KC_KP_4, KC_KP_5, KC_KP_6, KC_KP_ENTER,
         KC_KP_1, KC_KP_2, KC_KP_3, KC_COMMA,
         KC_KP_0, KC_KP_DOT, KC_KP_EQUAL, MO(1)),
 
-    ortho_4x5(
+    LAYOUT_MACROPAD(
         KC_TRNS, KC_TRNS, KC_TRNS, L1_PRECISION_MINUS,
         KC_TRNS, KC_TRNS, KC_TRNS, L1_PRECISION_PLUS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, RESET,
         KC_TRNS, KC_TRNS, TG(2), TO(0)),
 
-    ortho_4x5(
+    LAYOUT_MACROPAD(
         L1_PRINT_EQUATION, L1_SLASH, L1_MULTIPLY, L1_MINUS,
         L1_7, L1_8, L1_9, L1_PLUS,
         L1_4, L1_5, L1_6, L1_POWER,

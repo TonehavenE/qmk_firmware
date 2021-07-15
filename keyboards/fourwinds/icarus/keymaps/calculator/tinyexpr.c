@@ -244,10 +244,12 @@ void next_token(state *s) {
             s->type = TOK_NUMBER;
         } else {
             /* Look for a variable or builtin function call. */
-            if (isalpha(s->next[0])) {
+           // if (isalpha(s->next[0])) {
+              if (isalpha((unsigned char)s -> next[0])) {
                 const char *start;
                 start = s->next;
-                while (isalpha(s->next[0]) || isdigit(s->next[0]) || (s->next[0] == '_')) s->next++;
+                //while (isalpha(s->next[0]) || isdigit(s->next[0]) || (s->next[0] == '_')) s->next++;
+                while (isalpha((unsigned char) s->next[0]) || isdigit((unsigned char) s->next[0]) || (s->next[0] == '_')) s->next++;
                 
                 const te_variable *var = find_lookup(s, start, s->next - start);
                 if (!var) var = find_builtin(start, s->next - start);
@@ -517,7 +519,7 @@ static te_expr *list(state *s) {
 
 
 #define TE_FUN(...) ((double(*)(__VA_ARGS__))n->function)
-#define M(e) te_eval(n->parameters[e])
+#define MX(e) te_eval(n->parameters[e])
 
 
 double te_eval(const te_expr *n) {
@@ -531,13 +533,13 @@ double te_eval(const te_expr *n) {
         case TE_FUNCTION4: case TE_FUNCTION5: case TE_FUNCTION6: case TE_FUNCTION7:
             switch(ARITY(n->type)) {
                 case 0: return TE_FUN(void)();
-                case 1: return TE_FUN(double)(M(0));
-                case 2: return TE_FUN(double, double)(M(0), M(1));
-                case 3: return TE_FUN(double, double, double)(M(0), M(1), M(2));
-                case 4: return TE_FUN(double, double, double, double)(M(0), M(1), M(2), M(3));
-                case 5: return TE_FUN(double, double, double, double, double)(M(0), M(1), M(2), M(3), M(4));
-                case 6: return TE_FUN(double, double, double, double, double, double)(M(0), M(1), M(2), M(3), M(4), M(5));
-                case 7: return TE_FUN(double, double, double, double, double, double, double)(M(0), M(1), M(2), M(3), M(4), M(5), M(6));
+                case 1: return TE_FUN(double)(MX(0));
+                case 2: return TE_FUN(double, double)(MX(0), MX(1));
+                case 3: return TE_FUN(double, double, double)(MX(0), MX(1), MX(2));
+                case 4: return TE_FUN(double, double, double, double)(MX(0), MX(1), MX(2), MX(3));
+                case 5: return TE_FUN(double, double, double, double, double)(MX(0), MX(1), MX(2), MX(3), MX(4));
+                case 6: return TE_FUN(double, double, double, double, double, double)(MX(0), MX(1), MX(2), MX(3), MX(4), MX(5));
+                case 7: return TE_FUN(double, double, double, double, double, double, double)(MX(0), MX(1), MX(2), MX(3), MX(4), MX(5), MX(6));
                 default: return NAN;
             }
 
@@ -545,13 +547,13 @@ double te_eval(const te_expr *n) {
         case TE_CLOSURE4: case TE_CLOSURE5: case TE_CLOSURE6: case TE_CLOSURE7:
             switch(ARITY(n->type)) {
                 case 0: return TE_FUN(void*)(n->parameters[0]);
-                case 1: return TE_FUN(void*, double)(n->parameters[1], M(0));
-                case 2: return TE_FUN(void*, double, double)(n->parameters[2], M(0), M(1));
-                case 3: return TE_FUN(void*, double, double, double)(n->parameters[3], M(0), M(1), M(2));
-                case 4: return TE_FUN(void*, double, double, double, double)(n->parameters[4], M(0), M(1), M(2), M(3));
-                case 5: return TE_FUN(void*, double, double, double, double, double)(n->parameters[5], M(0), M(1), M(2), M(3), M(4));
-                case 6: return TE_FUN(void*, double, double, double, double, double, double)(n->parameters[6], M(0), M(1), M(2), M(3), M(4), M(5));
-                case 7: return TE_FUN(void*, double, double, double, double, double, double, double)(n->parameters[7], M(0), M(1), M(2), M(3), M(4), M(5), M(6));
+                case 1: return TE_FUN(void*, double)(n->parameters[1], MX(0));
+                case 2: return TE_FUN(void*, double, double)(n->parameters[2], MX(0), MX(1));
+                case 3: return TE_FUN(void*, double, double, double)(n->parameters[3], MX(0), MX(1), MX(2));
+                case 4: return TE_FUN(void*, double, double, double, double)(n->parameters[4], MX(0), MX(1), MX(2), MX(3));
+                case 5: return TE_FUN(void*, double, double, double, double, double)(n->parameters[5], MX(0), MX(1), MX(2), MX(3), MX(4));
+                case 6: return TE_FUN(void*, double, double, double, double, double, double)(n->parameters[6], MX(0), MX(1), MX(2), MX(3), MX(4), MX(5));
+                case 7: return TE_FUN(void*, double, double, double, double, double, double, double)(n->parameters[7], MX(0), MX(1), MX(2), MX(3), MX(4), MX(5), MX(6));
                 default: return NAN;
             }
 
