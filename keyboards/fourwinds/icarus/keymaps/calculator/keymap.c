@@ -1,4 +1,4 @@
-#include "dtostrf.h"
+// #include "dtostrf.h"
 // #include "tinyexpr.c"
 // #include "tinyexpr.h"
 #include <stdio.h>
@@ -18,11 +18,10 @@
 int input_count = 0;
 char expressions_buffer[EXPRESSIONS_BUFF_SIZE];
 int decimal_point_precision = 3;
-int print_size = 4;
 int error;
+bool use_degree = true;
+bool use_float = false;
 typedef double float64_t;
-
-
 
 /*
 #############################################################################################
@@ -124,87 +123,196 @@ enum custom_keycodes {
     CALC_LPR,
     CALC_RPR,
     CALC_BSPACE,
+    CALC_COM,
 };
-
-const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    [_main] = LAYOUT_MACROPAD(
-        TG(_calc), KC_SLSH, KC_ASTR, KC_BSPACE,
-        KC_7     , KC_8   , KC_9   , KC_PLUS,
-        KC_4     , KC_5   , KC_6   , KC_EQL,
-        KC_1     , KC_2   , KC_3   , KC_MINS,
-        KC_0     , KC_COMM, KC_DOT , KC_ENT
-    ),
-    [_calc] = LAYOUT_MACROPAD(
-        TG(_calc), CALC_DIV  , CALC_MUL  , CALC_BSPACE,
-        CALC_7 , CALC_8    , CALC_9    , CALC_ADD,
-        CALC_4 , CALC_5    , CALC_6    , CALC_EXP,
-        CALC_1 , CALC_2    , CALC_3    , CALC_SUB,
-        CALC_0 , TG(_func) , CALC_DOT, CALC_EQL
-        
-    ),
-    [_func] = LAYOUT_MACROPAD(
-        RESET  , CALC_E  , CALC_LOG, CALC_LN ,
-        CALC_PI, CALC_SIN, CALC_COS, CALC_TAN,
-        CALC_SINH, CALC_COSH, CALC_TANH, CALC_SQRT,
-        CALC_ATAN2, CALC_ASIN, CALC_ACOS, CALC_ATAN,
-        CALC_LPR, TG(_func), CALC_RPR, KC_TRNS
-    ),
-};
-void keyboard_post_init_user(void) {
-  // Customise these values to desired behaviour
-  debug_enable=true;
-  //debug_matrix=true;
-  debug_keyboard=true;
-  //debug_mouse=true;
-}
-layer_state_t layer_state_set_user(layer_state_t state) {
-    switch (get_highest_layer(state)) {
-    case _calc:
-        break;
-    case _func:
-        break;
-    default: //  for any other layers, or the default layer
-        input_count = 0;
-        oled_clear();
-        break;
-    }
-  return state;
-}
-#ifdef OLED_DRIVER_ENABLE
-
 void write_buffer(void) {
     oled_write_P(PSTR("\nIN:"), false);
     oled_write((expressions_buffer), false);
     oled_write_P(PSTR("\nOUT:"), false);
     double out_calc = te_interp(expressions_buffer, &error);
     if (error == 0){
-        char oled_int[EXPRESSIONS_BUFF_SIZE] = "";
-        char oled_frac[EXPRESSIONS_BUFF_SIZE] = "";
-        double ointe;
-        double ofract = modf(out_calc, &ointe);
-        uint64_t ointeger = (double) ointe;
-        //uint64_t fraction = (double) fract;
-        sprintf(oled_int, "%.0llu", ointeger);
-        sprintf(oled_frac, "%.*f", decimal_point_precision, ofract);
-        size_t i = 0;
-        while (oled_frac[i] != '\0') {
-            oled_frac[i] = oled_frac[i+1];
-            i++;
+        char oled_string[EXPRESSIONS_BUFF_SIZE];
+        if (use_float) {
+             sprintf(oled_string, "%.*f", decimal_point_precision, out_calc);
+        } else {
+            sprintf(oled_string, "%.*g", decimal_point_precision, out_calc);
         }
-        char oled_string[EXPRESSIONS_BUFF_SIZE + 10];
-        strcpy( oled_string, oled_int  );
-        strcat( oled_string, oled_frac );
         oled_write(oled_string, false);
     } else {
-    oled_write_P(PSTR("NAN"), false);
+    oled_write_P(PSTR("NAN"), true);
+    }
+    oled_write_P(PSTR("\nPRS: "), false);
+    char precision_string[] = "";
+    sprintf(precision_string, "%d", decimal_point_precision);
+    oled_write(precision_string, false);
+    oled_write_P(PSTR(" "), false);
+    oled_write_P(PSTR("DEG"), use_degree);
+    oled_write_P(PSTR("RAD"), !use_degree);
+    oled_write_P(PSTR(" "), false);
+    oled_write_P(PSTR("FP"), use_float);
+    oled_write_P(PSTR(" "), false);
+    oled_write_P(PSTR("SCI"), !use_float);
+}
+enum {
+    CALC_COMPR,
+    CALC_DOTPR,
+    CALC_EXPMOD,
+    CALC_UPPER,
+    CALC_DWNPR,
+    CALC_SUBCL,
+    CALC_MODE,
+    FUNC_LPR,
+    TAP_EQL,
+};
+void dance_compr_finished(qk_tap_dance_state_t *state, void *user_data) {
+    if (state->count == 1) {
+        write_char_to_buff(',', true);
+    } else if (state->count == 2) {
+        write_char_to_buff('(', true);
+    } else {
+        if (use_float) {
+            use_float = false;
+
+        } else {
+            use_float = true;
+        }
+        oled_clear();
+        write_buffer(); 
     }
 }
+void dance_dotpr_finished(qk_tap_dance_state_t *state, void *user_data) {
+    if (state->count == 1) {
+        write_char_to_buff('.', true);
+    } else {
+        write_char_to_buff(')', true);
+    }
+}
+void dance_expmod_finished(qk_tap_dance_state_t *state, void *user_data) {
+    if (state->count == 1) {
+        write_char_to_buff('^', true);
+    } else {
+        write_char_to_buff('%', true);
+    }
+}
+void dance_upper_finished(qk_tap_dance_state_t *state, void *user_data) {
+    if (state->count == 1) {
+        write_char_to_buff('*', true);
+    } else {
+        if(decimal_point_precision < 17) {
+            decimal_point_precision += 1;
+            #ifdef OLED_DRIVER_ENABLE
+            oled_clear();
+            write_buffer(); 
+            #endif
+        } 
+    }
+}
+void dance_dwnpr_finished(qk_tap_dance_state_t *state, void *user_data) {
+    if (state->count == 1) {
+        write_char_to_buff('/', true);
+    } else {
+        if(decimal_point_precision > 1) {
+            decimal_point_precision -= 1;
+            #ifdef OLED_DRIVER_ENABLE
+            oled_clear();
+            write_buffer(); 
+            #endif
+        } 
+    }
+}
+void dance_subcl_finished(qk_tap_dance_state_t *state, void *user_data) {
+    if (state->count == 1) {
+        write_char_to_buff('-', true);
+    } else {
+        if(input_count > 1) {
+            input_count = 0;
+        } 
+    }
+}
+void dance_funlpr_finished(qk_tap_dance_state_t *state, void *user_data) {
+    if (state->count == 1) {
+        write_char_to_buff('(', true);
+    } else {
+        reset_keyboard();
+    }
+}
+void dance_mode_finished(qk_tap_dance_state_t *state, void *user_data) {
+    if (state->count == 1) {
+        write_char_to_buff('+', true);
+    } else {
+        if (use_degree) {
+            use_degree = false;
+            oled_clear();
+            write_buffer();
+        } else {
+            use_degree = true;
+            oled_clear();
+            write_buffer();
+        }
+    }
+}
+// All tap dance functions would go here. Only showing this one.
+qk_tap_dance_action_t tap_dance_actions[] = {
+    [CALC_COMPR] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_compr_finished, NULL),
+    [CALC_DOTPR] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_dotpr_finished, NULL),
+    [CALC_EXPMOD] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_expmod_finished, NULL),
+    [CALC_UPPER] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_upper_finished, NULL),
+    [CALC_DWNPR] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_dwnpr_finished, NULL),
+    [CALC_SUBCL] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_subcl_finished, NULL),
+    [FUNC_LPR]   = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_funlpr_finished, NULL),
+    [CALC_MODE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_mode_finished, NULL),
+    [TAP_EQL] = ACTION_TAP_DANCE_DOUBLE(KC_EQL, KC_CIRC),
+};
+
+const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+    [_main] = LAYOUT_MACROPAD(
+        TO(_calc), KC_SLSH, KC_ASTR, KC_BSPACE,
+        KC_7     , KC_8   , KC_9   , KC_PLUS,
+        KC_4     , KC_5   , KC_6   , TD(TAP_EQL),
+        KC_1     , KC_2   , KC_3   , KC_MINS,
+        KC_0     , KC_COMM, KC_DOT , KC_ENT
+    ),
+    [_calc] = LAYOUT_MACROPAD(
+        TO(_func), TD(CALC_DWNPR), TD(CALC_UPPER)  , CALC_BSPACE,
+        CALC_7   , CALC_8    , CALC_9    , TD(CALC_MODE),
+        CALC_4   , CALC_5    , CALC_6    , TD(CALC_EXPMOD),
+        CALC_1   , CALC_2    , CALC_3    , TD(CALC_SUBCL),
+        CALC_0   , TD(CALC_COMPR), TD(CALC_DOTPR), CALC_EQL
+        
+    ),
+    [_func] = LAYOUT_MACROPAD(
+        TO(_main), CALC_LN  , CALC_LOG, CALC_BSPACE ,
+        CALC_E, CALC_SIN, CALC_COS, CALC_TAN,
+        CALC_SINH, CALC_COSH, CALC_TANH, CALC_SQRT,
+        CALC_ATAN2, CALC_ASIN, CALC_ACOS, CALC_ATAN,
+        CALC_LPR, TD(FUNC_LPR), CALC_RPR, CALC_PI
+    ),
+};
+#ifdef CONSOLE_ENABLE
+void keyboard_post_init_user(void) {
+  // Customise these values to desired behaviour
+  //debug_enable=true;
+  //debug_matrix=true;
+  //debug_keyboard=true;
+  //debug_mouse=true;
+}
+#endif
+#ifdef OLED_DRIVER_ENABLE
 
 void render_layer_state(void) {
-    oled_write_P(PSTR("LAYER"), false);
-    oled_write_P(PSTR(" Main"), layer_state_is(_main));
-    oled_write_P(PSTR(" Calc"), layer_state_is(_calc));
-    oled_write_P(PSTR(" Func"), layer_state_is(_func));
+    oled_write_P(PSTR("LAYER "), false);
+    oled_write_P(PSTR("Main"), layer_state_is(_main));
+    oled_write_P(PSTR(" "), false);
+    oled_write_P(PSTR("Calc"), layer_state_is(_calc));
+    oled_write_P(PSTR(" "), false);
+    oled_write_P(PSTR("Func"), layer_state_is(_func));
+}
+void main_keymap(void) {
+    oled_write_P(PSTR("LY / * <-\n"), false);
+    oled_write_P(PSTR("LY / * <-...7 8 9 +\n"), false);
+    oled_write_P(PSTR("4 5 6 =\n"), false);
+    oled_write_P(PSTR("1 2 3 -...0 , . ENT"), false);
+
 }
 void oled_task_user(void) {
     render_layer_state();
@@ -225,6 +333,41 @@ void write_char_to_buff (char c, bool oled_write) {
         #endif
     }
 }
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    switch (get_highest_layer(state)) {
+    case _calc:
+        #ifdef OLED_DRIVER_ENABLE
+        oled_clear();
+        write_buffer();
+        #endif
+        break;
+    case _func:
+        #ifdef OLED_DRIVER_ENABLE
+        oled_clear();
+        write_buffer();
+        #endif
+        break;
+    default: //  for any other layers, or the default layer
+        //input_count = 0;
+        oled_clear();
+        write_buffer();
+        //main_keymap();
+        break;
+    }
+  return state;
+}
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case TD(CALC_UPPER):
+            return TAPPING_TERM + 50;
+        case TD(CALC_DWNPR):
+            return TAPPING_TERM + 50;
+        default:
+            return TAPPING_TERM;
+    }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   // If console is enabled, it will print the matrix position and status of each key pressed
     /*
@@ -332,12 +475,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
         
         break;
-    
+    case CALC_COM:
+        if (record->event.pressed) {
+            write_char_to_buff(',', true);
+        }
+        break; 
+
+
     case CALC_SIN:
         if (record->event.pressed) {
            write_char_to_buff('s', false);
            write_char_to_buff('i', false);
-           write_char_to_buff('n', true);
+           write_char_to_buff('n', false);
+           write_char_to_buff('(', true);
         }
         
         break;
@@ -345,7 +495,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (record->event.pressed) {
            write_char_to_buff('c', false);
            write_char_to_buff('o', false);
-           write_char_to_buff('s', true);
+           write_char_to_buff('s', false);
+           write_char_to_buff('(', true);
         }
         
         break;
@@ -353,7 +504,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (record->event.pressed) {
            write_char_to_buff('t', false);
            write_char_to_buff('a', false);
-           write_char_to_buff('n', true);
+           write_char_to_buff('n', false);
+           write_char_to_buff('(', true);
         }
         
         break;
@@ -375,7 +527,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
            write_char_to_buff('s', false);
            write_char_to_buff('i', false);
            write_char_to_buff('n', false);
-           write_char_to_buff('h', true);
+           write_char_to_buff('h', false);
+           write_char_to_buff('(', true);
         }
         
         break;
@@ -384,7 +537,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
            write_char_to_buff('c', false);
            write_char_to_buff('o', false);
            write_char_to_buff('s', false);
-           write_char_to_buff('h', true);
+           write_char_to_buff('h', false);
+           write_char_to_buff('(', true);
         }
         
         break;
@@ -393,7 +547,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
            write_char_to_buff('t', false);
            write_char_to_buff('a', false);
            write_char_to_buff('n', false);
-           write_char_to_buff('h', true);
+           write_char_to_buff('h', false);
+            write_char_to_buff('(', true);
         }
         
         break;
@@ -402,7 +557,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
            write_char_to_buff('a', false);
            write_char_to_buff('s', false);
            write_char_to_buff('i', false);
-           write_char_to_buff('n', true);
+           write_char_to_buff('n', false);
+           write_char_to_buff('(', true);
         }
         
         break;
@@ -411,7 +567,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
            write_char_to_buff('a', false);
            write_char_to_buff('c', false);
            write_char_to_buff('o', false);
-           write_char_to_buff('s', true);
+           write_char_to_buff('s', false);
+           write_char_to_buff('(', true);
         }
         
         break;
@@ -420,7 +577,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
            write_char_to_buff('a', false);
            write_char_to_buff('t', false);
            write_char_to_buff('a', false);
-           write_char_to_buff('n', true);
+           write_char_to_buff('n', false);
+           write_char_to_buff('(', true);
         }
         break;
     case CALC_ATAN2:
@@ -429,7 +587,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
            write_char_to_buff('t', false);
            write_char_to_buff('a', false);
            write_char_to_buff('n', false);
-           write_char_to_buff('2', true);
+           write_char_to_buff('2', false);
+           write_char_to_buff('(', true);
 
         }
         break;
@@ -438,20 +597,23 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
            write_char_to_buff('s', false);
            write_char_to_buff('q', false);
            write_char_to_buff('r', false);
-           write_char_to_buff('t', true);
+           write_char_to_buff('t', false);
+           write_char_to_buff('(', true);
         }
         break;
     case CALC_LOG:
         if (record->event.pressed) {
            write_char_to_buff('l', false);
            write_char_to_buff('o', false);
-           write_char_to_buff('g', true);
+           write_char_to_buff('g', false);
+           write_char_to_buff('(', true);
         }
         break;
     case CALC_LN:
         if (record->event.pressed) {
            write_char_to_buff('l', false);
-           write_char_to_buff('n', true);
+           write_char_to_buff('n', false);
+           write_char_to_buff('(', true);
         }
         break;
     case CALC_LPR:
@@ -466,14 +628,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         break;
     case CALC_BSPACE:
         if (record->event.pressed) {
+            if (input_count > 0) {
             input_count -= 1;
             int i;
             for(i = input_count; i < strlen(expressions_buffer); i++)
                 expressions_buffer[i] = expressions_buffer[i + 1];
             #ifdef OLED_DRIVER_ENABLE
+            oled_clear();
             write_buffer();
             #endif
+            }
         }
+        break;
     case CALC_PRINT:
         if (record->event.pressed) {
             if (input_count > 0){
@@ -496,31 +662,26 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (input_count > 0) {
             double result = te_interp(expressions_buffer, &error);
             if (error == 0){
-                char output_int[EXPRESSIONS_BUFF_SIZE] = "";
-                char output_frac[EXPRESSIONS_BUFF_SIZE] = "";
-                double inte;
-                double fract = modf(result, &inte);
-                uint64_t integer = (double) inte;
-                //uint64_t fraction = (double) fract;
-                sprintf(output_int, "%.0llu", integer);
-                sprintf(output_frac, "%.*f", decimal_point_precision, fract);
-                size_t i = 0;
-                while (output_frac[i] != '\0') {
-                    output_frac[i] = output_frac[i+1];
-                    i++;
+                char output_result[EXPRESSIONS_BUFF_SIZE] = "";
+                if (use_float) {
+                    sprintf(output_result, "%.*f", decimal_point_precision, result);
+                } else {
+                    sprintf(output_result, "%.*g", decimal_point_precision, result);
                 }
-                send_string(output_int);
-                //SEND_STRING(".");
-                send_string(output_frac);
+                send_string(output_result);
                 input_count = 0;
+                expressions_buffer[0] = '\0';
                 #ifdef OLED_DRIVER_ENABLE
                 oled_clear();
+                write_buffer();
                 #endif
                 } else {
                 SEND_STRING("NaN");
                 input_count = 0;
+                expressions_buffer[0] = '\0';
                 #ifdef OLED_DRIVER_ENABLE
                 oled_clear();
+                write_buffer();
                 #endif
                 }
             }
@@ -644,6 +805,24 @@ static double fac(double a) {/* simplest version of fac */
     }
     return (double)result;
 }
+static double sin_d(double x) {
+    if (use_degree) {
+        x = x * (M_PI / 180); // convert to rads
+    }
+    return(sin(x));
+}
+static double cos_d(double x) {
+    if (use_degree) {
+        x = x * (M_PI / 180); // convert to rads
+    }
+    return(cos(x));
+}
+static double tan_d(double x) {
+    if (use_degree) {
+        x = x * (M_PI / 180); // convert to rads
+    }
+    return(tan(x));
+}
 static double ncr(double n, double r) {
     if (n < 0.0 || r < 0.0 || n < r) return NAN;
     if (n > UINT_MAX || r > UINT_MAX) return INFINITY;
@@ -668,7 +847,7 @@ static const te_variable functions[] = {
     {"atan", atan,    TE_FUNCTION1 | TE_FLAG_PURE, 0},
     {"atan2", atan2,  TE_FUNCTION2 | TE_FLAG_PURE, 0},
     {"ceil", ceil,    TE_FUNCTION1 | TE_FLAG_PURE, 0},
-    {"cos", cos,      TE_FUNCTION1 | TE_FLAG_PURE, 0},
+    {"cos", cos_d,      TE_FUNCTION1 | TE_FLAG_PURE, 0},
     {"cosh", cosh,    TE_FUNCTION1 | TE_FLAG_PURE, 0},
     {"e", e,          TE_FUNCTION0 | TE_FLAG_PURE, 0},
     {"exp", exp,      TE_FUNCTION1 | TE_FLAG_PURE, 0},
@@ -685,10 +864,10 @@ static const te_variable functions[] = {
     {"npr", npr,      TE_FUNCTION2 | TE_FLAG_PURE, 0},
     {"pi", pi,        TE_FUNCTION0 | TE_FLAG_PURE, 0},
     {"pow", pow,      TE_FUNCTION2 | TE_FLAG_PURE, 0},
-    {"sin", sin,      TE_FUNCTION1 | TE_FLAG_PURE, 0},
+    {"sin", sin_d,      TE_FUNCTION1 | TE_FLAG_PURE, 0},
     {"sinh", sinh,    TE_FUNCTION1 | TE_FLAG_PURE, 0},
     {"sqrt", sqrt,    TE_FUNCTION1 | TE_FLAG_PURE, 0},
-    {"tan", tan,      TE_FUNCTION1 | TE_FLAG_PURE, 0},
+    {"tan", tan_d,      TE_FUNCTION1 | TE_FLAG_PURE, 0},
     {"tanh", tanh,    TE_FUNCTION1 | TE_FLAG_PURE, 0},
     {0, 0, 0, 0}
 };
