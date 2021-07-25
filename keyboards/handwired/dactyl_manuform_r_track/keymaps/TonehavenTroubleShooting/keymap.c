@@ -453,10 +453,10 @@ void pointing_device_task(void) {
  **************************/
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case KC_LSPO:
-        	return TAPPING_TERM - 100;
-        case KC_RSPC:
-        	return TAPPING_TERM - 100;      
+        case KC_LCPO:
+        	return TAPPING_TERM - 120;
+        case KC_RCPC:
+        	return TAPPING_TERM - 120;      
         default:
             return TAPPING_TERM;
     }
