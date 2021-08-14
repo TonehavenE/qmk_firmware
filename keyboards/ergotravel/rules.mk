@@ -23,6 +23,4 @@ SLEEP_LED_ENABLE = no    # Breathing sleep LED during USB suspend
 
 SPLIT_KEYBOARD = yes
 
-COMBO_ENABLE = yes
-
-SRC += features/casemodes.c
+#COMBO_ENABLE = yes

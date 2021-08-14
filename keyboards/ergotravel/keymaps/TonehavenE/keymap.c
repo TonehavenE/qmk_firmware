@@ -1,7 +1,7 @@
 #include QMK_KEYBOARD_H
 #include "mousekey.h"
-#include "features/casemodes.h"
-#include "features/combo.h"
+//#include "features/casemodes.h"
+//#include "features/combo.h"
 
 #define KC_NP KC_NO // key is not present
 #define KC_NA KC_NO // present but not available for use
