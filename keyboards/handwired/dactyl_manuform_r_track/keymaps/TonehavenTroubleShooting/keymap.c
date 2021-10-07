@@ -21,60 +21,16 @@
 #include QMK_KEYBOARD_H
 
 #define _COLEMAK 0
-#define _ADJUST 1
+#define _GAME 1
 #define _LOWER 2
 #define _RAISE 3
-#define _MATH 4
-#define _UNICODE 5
-#define _FUNCTION 6
+#define _FUNCTION 4
 
-#define ADJUST MO(_ADJUST)
+#define GAME MO(_GAME)
 #define RAISE MO(_RAISE)
 #define LOWER MO(_LOWER)
-#define MATH MO(_MATH)
-#define UNICODE MO(_UNICODE)
 #define FUNCTION MO(_FUNCTION)
 
-
-/***************************
- * Trackball related defines
- **************************/
-
-#include "pointing_device.h"
-#include "../../pmw3360/pmw3360.h"
-
-uint8_t track_mode = 0; // 0 Mousecursor; 1 arrowkeys/carret; 2 scrollwheel; 3 sound/brightness
-#define cursor_mode 0
-#define carret_mode 1
-#define scroll_mode 2
-#define sound_brightness_mode 3
-uint8_t prev_track_mode = 0;
-bool integration_mode = false;
-int16_t cum_x = 0;
-int16_t cum_y = 0;
-int16_t sensor_x = 0;
-int16_t sensor_y = 0;
-
-// Thresholds help to move only horizontal or vertical. When accumulated distance reaches threshold, only move one discrete value in direction with bigger delta.
-uint8_t	carret_threshold = 60;		 // higher means slower
-uint16_t carret_threshold_inte = 400; // in integration mode higher threshold
-
-#define regular_smoothscroll_factor 8
-bool smooth_scroll = true;
-uint8_t	scroll_threshold = 8 / regular_smoothscroll_factor;	// divide if started smooth
-uint16_t scroll_threshold_inte = 1200 / regular_smoothscroll_factor;
-
-uint16_t cursor_multiplier = 150;	// adjust cursor speed
-uint16_t cursor_multiplier_inte = 20;
-#define CPI_STEP 10
-
-int16_t cur_factor;
-
-
-/***************************
- * Unicode Defines
- **************************/
-// Defining the names for Unicode
 enum unicode_names {
 	PlusMinus,
 	SQRT,
@@ -137,7 +93,39 @@ const uint32_t PROGMEM unicode_map[] = {
   [NinethPower] = 0x2079,   //
   [Integral]    = 0x222B    //
 };
+/***************************
+ * Trackball related defines
+ **************************/
 
+#include "pointing_device.h"
+#include "../../pmw3360/pmw3360.h"
+
+uint8_t track_mode = 0; // 0 Mousecursor; 1 arrowkeys/carret; 2 scrollwheel; 3 sound/brightness
+#define cursor_mode 0
+#define carret_mode 1
+#define scroll_mode 2
+#define sound_brightness_mode 3
+uint8_t prev_track_mode = 0;
+bool integration_mode = false;
+int16_t cum_x = 0;
+int16_t cum_y = 0;
+int16_t sensor_x = 0;
+int16_t sensor_y = 0;
+
+// Thresholds help to move only horizontal or vertical. When accumulated distance reaches threshold, only move one discrete value in direction with bigger delta.
+uint8_t	carret_threshold = 60;		 // higher means slower
+uint16_t carret_threshold_inte = 400; // in integration mode higher threshold
+
+#define regular_smoothscroll_factor 8
+bool smooth_scroll = true;
+uint8_t	scroll_threshold = 8 / regular_smoothscroll_factor;	// divide if started smooth
+uint16_t scroll_threshold_inte = 1200 / regular_smoothscroll_factor;
+
+uint16_t cursor_multiplier = 150;	// adjust cursor speed
+uint16_t cursor_multiplier_inte = 20;
+#define CPI_STEP 10
+
+int16_t cur_factor;
 
 /***************************
  * Mouse pressed
@@ -202,11 +190,9 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
 
 enum custom_keycodes {
 	KC_INTE = SAFE_RANGE,
-	KC_ADJUST,
+	KC_GAME,
 	KC_RAISE,
 	KC_LOWER,
-	KC_MATH,
-	KC_UNICODE,
 	KC_FUNCTION,
 	KC_BSPC_LCTL,
 	KC_CPI_DOWN,
@@ -221,32 +207,22 @@ enum custom_keycodes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_COLEMAK] = LAYOUT_5x6(
-KC_GESC         , KC_1 ,   KC_2 , KC_3, KC_4, KC_5   ,               KC_6,    KC_7, KC_8   , KC_9  , KC_0        , KC_EQUAL  ,
-LALT_T(KC_MINUS), KC_Q ,   KC_W , KC_F, KC_P, KC_G   ,			     KC_J,    KC_L, KC_U   , KC_Y  , KC_QUOTE    , KC_SCOLON ,
-KC_LSFT         , KC_A ,   KC_R , KC_S, KC_T, KC_D   ,               KC_H,    KC_N, KC_E   , KC_I  , KC_O        , KC_RSFT   ,
-KC_LCPO         , KC_Z ,   KC_X , KC_C, KC_V, KC_B   ,               KC_K,    KC_M, KC_COMM, KC_DOT, KC_SLASH    , KC_RCPC   ,
-                           LGUI_T(KC_LBRC),RGUI_T(KC_RBRC),                                         TG(_ADJUST), TG(_LOWER),
-                                       LT(_UNICODE, KC_TAB), LT(_RAISE, KC_SPACE),  _______, KC_BSPC,
-                                       LT(_MATH, KC_EQUAL) , _______,      _______, LT(_FUNCTION, KC_ENT),
-                                       KC_CURSORMODE       , KC_CARRETMODE   ,      KC_DEL, KC_BSLASH
+KC_GESC, KC_1 ,   KC_2 , KC_3, KC_4, KC_5   ,              				KC_6,    KC_7, KC_8   , KC_9  , KC_0        , KC_EQUAL  ,
+KC_LALT, KC_Q ,   KC_W , KC_F, KC_P, KC_G   ,			     			KC_J,    KC_L, KC_U   , KC_Y  , KC_QUOTE    , KC_SCOLON ,
+KC_LSFT, KC_A ,   KC_R , KC_S, KC_T, KC_D   ,               			KC_H,    KC_N, KC_E   , KC_I  , KC_O        , KC_RSFT   ,
+KC_LCTL, KC_Z ,   KC_X , KC_C, KC_V, KC_B   ,               			KC_K,    KC_M, KC_COMM, KC_DOT, KC_SLASH    , KC_MINUS   ,
+                  KC_LBRC,KC_RBRC,                                         			KC_LPRN, KC_RPRN,
+                                       RAISE, KC_SPACE, 								_______, KC_BSPC,
+                                       KC_LGUI, KC_TAB,      						_______, LT(_FUNCTION, KC_ENT),
+                                       KC_CURSORMODE, KC_CARRETMODE,      			KC_DEL, KC_BSLASH
 ),
 
-[_ADJUST] = LAYOUT_5x6(
-/*
-KC_ESC , KC_1  , KC_2  , KC_3  , KC_4  , KC_5  ,                        _______, _______, _______, _______, _______, _______,
-KC_TAB , KC_Q  , KC_W  , KC_E  , KC_R  , KC_T  ,                        _______, _______, _______, _______, _______, _______,
-KC_LSFT, KC_A  , KC_S  , KC_D  , KC_F  , KC_G  ,                        _______, KC_BTN1, KC_BTN3, KC_BTN2, _______, _______,
-KC_LCTL, KC_Z  , KC_X  , KC_C  , KC_V  , KC_B  ,                        _______, _______, _______, _______, _______, _______,
-                          _______, _______,                                          _______, _______,
-                                            KC_LALT, KC_SPACE,               _______, _______,
-                                            _______, KC_R,               _______, _______,
-                                            _______, _______,               _______, _______
-*/
+[_GAME] = LAYOUT_5x6(
 KC_ESC , KC_5, KC_1  , KC_2  , KC_3  , KC_4  ,                        _______, _______, _______, _______, _______, _______,
 KC_TAB , KC_C, KC_Q  , KC_W  , KC_E  , KC_R  ,                        _______, _______, _______, _______, _______, _______,
-KC_LSFT, KC_G, KC_A  , KC_S  , KC_D  , KC_F  ,                        _______, KC_BTN1, KC_BTN3, KC_BTN2, _______, _______,
+KC_LSFT, KC_G, KC_A  , KC_S  , KC_D  , KC_F  ,                        _______, _______, _______, _______, _______, _______,
 KC_LCTL, KC_B, KC_Z  , KC_X  , KC_C  , KC_V  ,                        _______, _______, _______, _______, _______, _______,
-                          _______, _______,                                          _______, _______,
+                          _______, _______,                                          TG(_GAME), TG(_LOWER),
                                             KC_LALT, KC_SPACE,               _______, _______,
                                             _______, KC_R,               _______, _______,
                                             _______, _______,               _______, _______
@@ -258,7 +234,7 @@ _______, _______, _______, _______, _______, _______,                        KC_
 _______, _______, _______, _______, _______, _______,                        KC_WH_U    , KC_SCROLLMODE, KC_CURSORMODE, KC_CARRETMODE, _______, _______,
 _______, _______, _______, _______, _______, _______,                        KC_WH_D    , KC_BTN1      , KC_BTN3      , KC_BTN2      , _______, _______,
 _______, _______, _______, _______, _______, _______,                       _______    , KC_BTN4      , KC_BTN5      , _______      , _______, _______,
-                          _______, _______,                                          _______, _______,
+                          _______, _______,                                          TG(_GAME), TG(_LOWER),
                                             _______, _______,               _______, _______,
                                             _______, _______,               _______, _______,
                                             _______, _______,               _______, _______
@@ -269,30 +245,7 @@ KC_GRAVE, _______ , _______ , _______ , _______ , RESET  ,                 RESET
 _______ , _______ , _______ , _______ , _______ , _______,                 _______, KC_HOME  , KC_UP   ,KC_END  , _______, _______,
 _______ , KC_LGUI , KC_LALT , KC_LCTL , KC_LSFT , _______,                 _______, KC_LEFT  , KC_DOWN ,KC_RIGHT, _______, _______,
 _______ , _______ , KC_ALGR , _______ , _______ , _______,                 _______, _______, _______ ,_______, _______, _______,
-                             _______,_______,                                KC_HOME,KC_END,
-                                        _______,_______,             _______,_______,
-                                        _______,_______,             _______,_______,
-                                        _______,_______,             _______,_______
-),
-
-
-[_MATH] = LAYOUT_5x6(
-RESET  , _______ , _______ , _______ , _______ , _______,                 X(SQRT)     , X(Divide), KC_ASTR, KC_MINUS, KC_PLUS , KC_Z    ,
-_______, _______ , _______ , _______ , _______ , _______,                 X(Squared)  , KC_7     , KC_8   , KC_9    , KC_EQUAL, KC_Y    ,
-_______, KC_LGUI , KC_LALT , KC_LCTL , KC_LSFT , _______,                 X(PlusMinus), KC_4     , KC_5   , KC_6    , KC_DOT  , KC_X    ,
-_______, _______ , KC_ALGR , _______ , _______ , _______,                 KC_CIRC     , KC_1     , KC_2   , KC_3    , KC_COMM , KC_ENTER,
-                             _______,_______,                                KC_LPRN,KC_RPRN,
-                                        _______,_______,             _______,KC_0   ,
-                                        _______,_______,             _______,X(Pi)  ,
-                                        _______,_______,             _______,_______
-),
-
-[_UNICODE] = LAYOUT_5x6(
-RESET  , _______ , _______ , _______ , _______ , _______,                 X(Alpha), X(SQRT)        , X(CubeRoot) , X(FourthRoot)  , X(Angle)      , X(Integral),
-_______, _______ , _______ , _______ , _______ , _______,                 X(Beta) , X(SeventhPower), X(EigthPower),X(NinethPower), X(mesAngle)   , X(Farenheit),
-_______, KC_LGUI , KC_LALT , KC_LCTL , KC_LSFT , _______,                 X(Delta), X(FourthPower) , X(FifthPower),X(SixthPower) , X(NotEqual)   , X(Degree),
-_______, _______ , KC_ALGR , _______ , _______ , _______,                 X(Theta), X(FirstPower)  , X(Squared)   ,X(Cubed)       , X(ApproxEqual), X(Infinity),
-                             _______,_______,                                _______,_______,
+                             _______,_______,                                TG(_GAME), TG(_LOWER), 
                                         _______,_______,             _______,_______,
                                         _______,_______,             _______,_______,
                                         _______,_______,             _______,_______
@@ -303,7 +256,7 @@ _______, _______ , KC_F10, KC_F11, KC_F12, _______,                 _______, ___
 _______, _______ , KC_F7 , KC_F8 , KC_F9 , _______,                 _______, _______  , _______ ,_______, _______, _______,
 _______, KC_LGUI , KC_F4 , KC_F5 , KC_F6 , _______,                 _______, KC_RSHIFT, KC_RCTRL,KC_RALT, KC_LGUI, _______,
 _______, _______ , KC_F1 , KC_F2 , KC_F3 , _______,                 _______, _______  , _______ ,KC_ALGR, _______, _______,
-                             _______,_______,                                _______,_______,
+                             _______,_______,                                TG(_GAME), TG(_LOWER),
                                         _______,_______,             _______,_______,
                                         _______,_______,             _______,_______,
                                         _______,_______,             _______,_______
