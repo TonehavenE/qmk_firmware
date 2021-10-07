@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "config_common.h"
-#define PRODUCT         Dactyl Ergo(6x6)
+#define PRODUCT         Dactyl 5x6
 
 /* key matrix size */
 // Rows are doubled-up
@@ -27,8 +27,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MATRIX_COLS 6
 
 // wiring of each half
-#define MATRIX_COL_PINS { D4, D6, D5, B4, B5, B6 }
-#define MATRIX_ROW_PINS { F0, F1, F4, F5, F6, F7 }
+#define MATRIX_COL_PINS { B6, B5, B4, D5, D6, D4}
+#define MATRIX_ROW_PINS { F0, F1, F4, F5, F6, F7}
+#define MATRIX_COL_PINS_RIGHT { D4, D6, D5, B4, B5, B6 }
+#define MATRIX_ROW_PINS_RIGHT { F0, F1, F4, F5, F6, F7 }
 
 #define DIODE_DIRECTION COL2ROW
 
@@ -42,8 +44,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define DEBOUNCE 5
 
 /* serial.c configuration for split keyboard */
+#define USE_SERIAL
 #define SOFT_SERIAL_PIN D2
-#define MASTER_RIGHT
+#define MASTER_LEFT
 /* Mechanical locking support. Use KC_LCAP, KC_LNUM or KC_LSCR instead in keymap */
 #define LOCKING_SUPPORT_ENABLE
 /* Locking resynchronize hack */
@@ -52,3 +55,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define BOOTMAGIC_LITE_ROW 0
 #define BOOTMAGIC_LITE_COLUMN 0
+#define BOOTMAGIC_LITE_ROW_RIGHT 6
+#define BOOTMAGIC_LITE_COLUMN_RIGHT 5 
