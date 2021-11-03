@@ -70,7 +70,7 @@ const uint32_t PROGMEM unicode_map[] = {
 	[Dash]      = 0x2014,     // —
 	[CubeRoot]  = 0x221B,     //∛
 	[FourthRoot]= 0x221C,     //∜
-	[Infinity]  = 0x221E,     // not programmed, oops. 
+	[Infinity]  = 0x221E,     // not programmed, oops.
 	[Theta]     = 0x0398,     //Θ
 	[Pi]        = 0x03C0,     //π
 	[Alpha]     = 0x03B1,     //α
@@ -201,7 +201,8 @@ enum custom_keycodes {
 	KC_SMO_SC,
 	KC_CURSORMODE,
     KC_SCROLLMODE,
-    KC_CARRETMODE
+    KC_CARRETMODE,
+    openTerminal,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -209,7 +210,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_COLEMAK] = LAYOUT_5x6(
 KC_GESC, KC_1 ,   KC_2 , KC_3, KC_4, KC_5   ,              				KC_6,    KC_7, KC_8   , KC_9  , KC_0        , KC_EQUAL  ,
 KC_LALT, KC_Q ,   KC_W , KC_F, KC_P, KC_G   ,			     			KC_J,    KC_L, KC_U   , KC_Y  , KC_QUOTE    , KC_SCOLON ,
-KC_LSFT, KC_A ,   KC_R , KC_S, KC_T, KC_D   ,               			KC_H,    KC_N, KC_E   , KC_I  , KC_O        , KC_RSFT   ,
+KC_LSFT, KC_A ,   KC_R , KC_S, KC_T, KC_D   ,               			KC_H,    KC_N, KC_E   , KC_I  , KC_O        , openTerminal   ,
 KC_LCTL, KC_Z ,   KC_X , KC_C, KC_V, KC_B   ,               			KC_K,    KC_M, KC_COMM, KC_DOT, KC_SLASH    , KC_MINUS   ,
                   KC_LBRC,KC_RBRC,                                         			KC_LPRN, KC_RPRN,
                                        RAISE, KC_SPACE, 								_______, KC_BSPC,
@@ -241,11 +242,11 @@ _______, _______, _______, _______, _______, _______,                       ____
 ),
 
 [_RAISE] = LAYOUT_5x6(
-KC_GRAVE, _______ , _______ , _______ , _______ , RESET  ,                 RESET  , KC_DELETE, _______ ,KC_PGUP , _______, _______,
-_______ , _______ , _______ , _______ , _______ , _______,                 _______, KC_HOME  , KC_UP   ,KC_END  , _______, _______,
-_______ , KC_LGUI , KC_LALT , KC_LCTL , KC_LSFT , _______,                 _______, KC_LEFT  , KC_DOWN ,KC_RIGHT, _______, _______,
-_______ , _______ , KC_ALGR , _______ , _______ , _______,                 _______, _______, _______ ,_______, _______, _______,
-                             _______,_______,                                TG(_GAME), TG(_LOWER), 
+KC_GRAVE, _______ , _______ , KC_0 , _______ , RESET  ,                 RESET  , KC_DELETE, _______ ,KC_PGUP , _______, _______,
+_______ , _______ , KC_7    , KC_8 , KC_9    , _______,                 _______, KC_HOME  , KC_UP   ,KC_END  , _______, _______,
+_______ , KC_0    , KC_4    , KC_5 , KC_6    , _______,                 _______, KC_LEFT  , KC_DOWN ,KC_RIGHT, _______, _______,
+_______ , _______ , KC_1    , KC_2 , KC_3    , _______,                 _______, _______, _______ ,_______, _______, _______,
+                             _______,_______,                                TG(_GAME), TG(_LOWER),
                                         _______,_______,             _______,_______,
                                         _______,_______,             _______,_______,
                                         _______,_______,             _______,_______
@@ -409,7 +410,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
         case KC_LCPO:
         	return TAPPING_TERM - 120;
         case KC_RCPC:
-        	return TAPPING_TERM - 120;      
+        	return TAPPING_TERM - 120;
         default:
             return TAPPING_TERM;
     }
@@ -446,7 +447,14 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
                 } else {
                 }
             return false;
-            	
+
+        case openTerminal:
+            if (record->event.pressed) {
+                SEND_STRING(SS_TAP(X_LGUI)"Windows Terminal \n");
+            } else {
+
+            }
+
 		// handle mouse
 		case KC_BTN1:
 			on_mouse_button(MOUSE_BTN1, record->event.pressed);
