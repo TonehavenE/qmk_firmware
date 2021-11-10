@@ -1,0 +1,27 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${HOME}/qmk_firmare/",
+                "${HOME}/qmk_firmware/**",
+                "${HOME}/qmk_firmware/quantum/**",
+                "${HOME}/qmk_firmware/tmk_core/common/**",
+                "${HOME}/qmk_firmware/quantum/audio/**",
+                "${HOME}/qmk_firmware/quantum/process_keycode/**",
+                "${HOME}/qmk_firmware/drivers/avr/**",
+                "${HOME}/qmk_firmware/lib/chibios/**",
+                "${HOME}/qmk_firmware/lib/lufa/**",
+                "${HOME}/qmk_firmare/avr/**",
+                "${HOME}/qmk_firmare/keyboards/tantalus/**",
+                "${HOME}/qmk_firmare/keyboards/tantalus/keymaps/tonehaven/**"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu17",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}
