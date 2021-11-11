@@ -18,9 +18,9 @@ MIDI_ENABLE = no            # MIDI controls
 AUDIO_ENABLE = no           # Audio output on port C6
 UNICODE_ENABLE = no         # Unicode
 BLUETOOTH_ENABLE = no       # Enable Bluetooth with the Adafruit EZ-Key HID
-RGBLIGHT_ENABLE = no        # Enable WS2812 RGB underlight. 
+RGBLIGHT_ENABLE = no        # Enable WS2812 RGB underlight.
 LTO_ENABLE = yes
-DEBOUNCE_TYPE = sym_eager_pk
+DEBOUNCE_TYPE = sym_defer_pk
 # Add trackball support
 POINTING_DEVICE_ENABLE = yes
 
