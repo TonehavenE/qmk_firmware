@@ -34,7 +34,6 @@ HD44780_ENABLE = no         # Enable support for HD44780 based LCDs
 COMBO_ENABLE = yes
 LTO_ENABLE = yes
 
-DEBOUNCE_TYPE = eager_pk
 SPLIT_KEYBOARD = yes
 TAP_DANCE_ENABLE = no
 

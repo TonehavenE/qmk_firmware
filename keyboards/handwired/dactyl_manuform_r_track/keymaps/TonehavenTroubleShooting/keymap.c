@@ -31,67 +31,38 @@
 #define LOWER MO(_LOWER)
 #define FUNCTION MO(_FUNCTION)
 
-enum unicode_names {
-	PlusMinus,
-	SQRT,
-	Divide,
-	Dash,
-	CubeRoot,
-	FourthRoot,
-	Infinity,
-	Delta,
-	Theta,
-	Pi,
-	Alpha,
-	Beta,
-	NotEqual,
-	Farenheit,
-	Degree,
-	Angle,
-	mesAngle,
-	ApproxEqual,
-	FirstPower,
-	Squared,
-	Cubed,
-	FourthPower,
-	FifthPower,
-	SixthPower,
-	SeventhPower,
-	EigthPower,
-	NinethPower,
-	Integral
-};
+enum unicode_names { PlusMinus, SQRT, Divide, Dash, CubeRoot, FourthRoot, Infinity, Delta, Theta, Pi, Alpha, Beta, NotEqual, Farenheit, Degree, Angle, mesAngle, ApproxEqual, FirstPower, Squared, Cubed, FourthPower, FifthPower, SixthPower, SeventhPower, EigthPower, NinethPower, Integral };
 
 // Defining the unicode symbols
 const uint32_t PROGMEM unicode_map[] = {
-	[PlusMinus] = 0x00B1,     // ±
-	[SQRT]      = 0x221A,     // √
-	[Divide]    = 0x00F7,     // ÷
-	[Dash]      = 0x2014,     // —
-	[CubeRoot]  = 0x221B,     //∛
-	[FourthRoot]= 0x221C,     //∜
-	[Infinity]  = 0x221E,     // not programmed, oops.
-	[Theta]     = 0x0398,     //Θ
-	[Pi]        = 0x03C0,     //π
-	[Alpha]     = 0x03B1,     //α
-	[Beta]      = 0x03B2,     //β
-	[Delta]     = 0x0394,     //Δ
-	[NotEqual]  = 0x2260,     //≠
-	[Farenheit] = 0x2109,     //℉
-	[Degree]    = 0x00B0,     //°
-	[Angle]     = 0x2220,     //∠
-	[mesAngle]  = 0x2221,     //∡
-	[ApproxEqual] = 0x2245,   //≅
-	[FirstPower]  = 0x00B9,   //
-	[Squared]     = 0x00B2,   //²
-	[Cubed]       = 0x00B3,   //³
-  [FourthPower] = 0x2074,   //⁴
-  [FifthPower]  = 0x2075,   //⁵
-  [SixthPower]  = 0x2076,   //⁶
-  [SeventhPower] =0x2077,   //
-  [EigthPower]  = 0x2078,   //
-  [NinethPower] = 0x2079,   //
-  [Integral]    = 0x222B    //
+    [PlusMinus]    = 0x00B1,  // ±
+    [SQRT]         = 0x221A,  // √
+    [Divide]       = 0x00F7,  // ÷
+    [Dash]         = 0x2014,  // —
+    [CubeRoot]     = 0x221B,  //∛
+    [FourthRoot]   = 0x221C,  //∜
+    [Infinity]     = 0x221E,  // not programmed, oops.
+    [Theta]        = 0x0398,  //Θ
+    [Pi]           = 0x03C0,  //π
+    [Alpha]        = 0x03B1,  //α
+    [Beta]         = 0x03B2,  //β
+    [Delta]        = 0x0394,  //Δ
+    [NotEqual]     = 0x2260,  //≠
+    [Farenheit]    = 0x2109,  //℉
+    [Degree]       = 0x00B0,  //°
+    [Angle]        = 0x2220,  //∠
+    [mesAngle]     = 0x2221,  //∡
+    [ApproxEqual]  = 0x2245,  //≅
+    [FirstPower]   = 0x00B9,  //
+    [Squared]      = 0x00B2,  //²
+    [Cubed]        = 0x00B3,  //³
+    [FourthPower]  = 0x2074,  //⁴
+    [FifthPower]   = 0x2075,  //⁵
+    [SixthPower]   = 0x2076,  //⁶
+    [SeventhPower] = 0x2077,  //
+    [EigthPower]   = 0x2078,  //
+    [NinethPower]  = 0x2079,  //
+    [Integral]     = 0x222B   //
 };
 /***************************
  * Trackball related defines
@@ -100,28 +71,28 @@ const uint32_t PROGMEM unicode_map[] = {
 #include "pointing_device.h"
 #include "../../pmw3360/pmw3360.h"
 
-uint8_t track_mode = 0; // 0 Mousecursor; 1 arrowkeys/carret; 2 scrollwheel; 3 sound/brightness
+uint8_t track_mode = 0;  // 0 Mousecursor; 1 arrowkeys/carret; 2 scrollwheel; 3 sound/brightness
 #define cursor_mode 0
 #define carret_mode 1
 #define scroll_mode 2
 #define sound_brightness_mode 3
-uint8_t prev_track_mode = 0;
-bool integration_mode = false;
-int16_t cum_x = 0;
-int16_t cum_y = 0;
-int16_t sensor_x = 0;
-int16_t sensor_y = 0;
+uint8_t prev_track_mode  = 0;
+bool    integration_mode = false;
+int16_t cum_x            = 0;
+int16_t cum_y            = 0;
+int16_t sensor_x         = 0;
+int16_t sensor_y         = 0;
 
 // Thresholds help to move only horizontal or vertical. When accumulated distance reaches threshold, only move one discrete value in direction with bigger delta.
-uint8_t	carret_threshold = 60;		 // higher means slower
-uint16_t carret_threshold_inte = 400; // in integration mode higher threshold
+uint8_t  carret_threshold      = 60;   // higher means slower
+uint16_t carret_threshold_inte = 400;  // in integration mode higher threshold
 
 #define regular_smoothscroll_factor 8
-bool smooth_scroll = true;
-uint8_t	scroll_threshold = 8 / regular_smoothscroll_factor;	// divide if started smooth
+bool     smooth_scroll         = true;
+uint8_t  scroll_threshold      = 8 / regular_smoothscroll_factor;  // divide if started smooth
 uint16_t scroll_threshold_inte = 1200 / regular_smoothscroll_factor;
 
-uint16_t cursor_multiplier = 150;	// adjust cursor speed
+uint16_t cursor_multiplier      = 150;  // adjust cursor speed
 uint16_t cursor_multiplier_inte = 20;
 #define CPI_STEP 10
 
@@ -132,14 +103,14 @@ int16_t cur_factor;
  **************************/
 
 void on_mouse_button(uint8_t mouse_button, bool pressed) {
-	report_mouse_t report = pointing_device_get_report();
+    report_mouse_t report = pointing_device_get_report();
 
-	if(pressed)
-		report.buttons |= mouse_button;
-	else
-		report.buttons &= ~mouse_button;
-	pointing_device_set_report(report);
-	pointing_device_send();
+    if (pressed)
+        report.buttons |= mouse_button;
+    else
+        report.buttons &= ~mouse_button;
+    pointing_device_set_report(report);
+    pointing_device_send();
 }
 
 /***************************
@@ -152,9 +123,9 @@ enum combo_events {
 };
 
 // Mouse Combos
-const uint16_t PROGMEM rsm_combo[] = {KC_R, KC_S, COMBO_END};
-const uint16_t PROGMEM stm_combo[] = {KC_S, KC_T, COMBO_END};
-const uint16_t PROGMEM rtm_combo[] = {KC_R, KC_T, COMBO_END};
+const uint16_t PROGMEM rsm_combo[] = {KC_W, KC_F, COMBO_END};
+const uint16_t PROGMEM stm_combo[] = {KC_F, KC_P, COMBO_END};
+const uint16_t PROGMEM rtm_combo[] = {KC_W, KC_P, COMBO_END};
 
 combo_t key_combos[COMBO_COUNT] = {
     [RS_MOUSE] = COMBO_ACTION(rsm_combo),
@@ -163,24 +134,25 @@ combo_t key_combos[COMBO_COUNT] = {
 };
 
 #define MODS_SHIFT (get_mods() & MOD_BIT(KC_LSHIFT) || get_mods() & MOD_BIT(KC_RSHIFT))
-#define SEND_CAP_STRING(str, capitalized) if (MODS_SHIFT) { \
-                                            clear_mods(); \
-                                            SEND_STRING(capitalized); \
-                                          } else { \
-                                            SEND_STRING(str); \
-                                          }
+#define SEND_CAP_STRING(str, capitalized) \
+    if (MODS_SHIFT) {                     \
+        clear_mods();                     \
+        SEND_STRING(capitalized);         \
+    } else {                              \
+        SEND_STRING(str);                 \
+    }
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
-    switch(combo_index) {
+    switch (combo_index) {
         case RS_MOUSE:
-        on_mouse_button(MOUSE_BTN2, pressed);
-        break;
-    case ST_MOUSE:
-        on_mouse_button(MOUSE_BTN1, pressed);
-        break;
-    case RT_MOUSE:
-        on_mouse_button(MOUSE_BTN3, pressed);
-        break;
+            on_mouse_button(MOUSE_BTN2, pressed);
+            break;
+        case ST_MOUSE:
+            on_mouse_button(MOUSE_BTN1, pressed);
+            break;
+        case RT_MOUSE:
+            on_mouse_button(MOUSE_BTN3, pressed);
+            break;
     }
 };
 
@@ -189,24 +161,24 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
  **************************/
 
 enum custom_keycodes {
-	KC_INTE = SAFE_RANGE,
-	KC_GAME,
-	KC_RAISE,
-	KC_LOWER,
-	KC_FUNCTION,
-	KC_BSPC_LCTL,
-	KC_CPI_DOWN,
-	KC_CPI_STD,
-	KC_CPI_UP,
-	KC_SMO_SC,
-	KC_CURSORMODE,
+    KC_INTE = SAFE_RANGE,
+    KC_GAME,
+    KC_RAISE,
+    KC_LOWER,
+    KC_FUNCTION,
+    KC_BSPC_LCTL,
+    KC_CPI_DOWN,
+    KC_CPI_STD,
+    KC_CPI_UP,
+    KC_SMO_SC,
+    KC_CURSORMODE,
     KC_SCROLLMODE,
     KC_CARRETMODE,
     openTerminal,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-
+    // clang-format off
 [_COLEMAK] = LAYOUT_5x6(
 KC_GESC, KC_1 ,   KC_2 , KC_3, KC_4, KC_5   ,              				KC_6,    KC_7, KC_8   , KC_9  , KC_0        , KC_EQUAL  ,
 KC_LALT, KC_Q ,   KC_W , KC_F, KC_P, KC_G   ,			     			KC_J,    KC_L, KC_U   , KC_Y  , KC_QUOTE    , KC_SCOLON ,
@@ -263,7 +235,7 @@ _______, _______ , KC_F1 , KC_F2 , KC_F3 , _______,                 _______, ___
                                         _______,_______,             _______,_______
 ),
 
-
+// clang-format off
 };
 
 /***************************
