@@ -20,18 +20,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "config_common.h"
 
 /* USB Device descriptor parameter */
-#define VENDOR_ID    0xFEED
-#define PRODUCT_ID   0x0000
-#define DEVICE_VER   0x0001
+#define VENDOR_ID 0xFEED
+#define PRODUCT_ID 0x0000
+#define DEVICE_VER 0x0001
 #define MANUFACTURER TonehavenE
-#define PRODUCT      dad_kb
+#define PRODUCT dad_kb
 
 /* key matrix size */
 #define MATRIX_ROWS 10
 #define MATRIX_COLS 7
 
-#define MATRIX_ROW_PINS { F4, F5, F6, F7, B1 }
-#define MATRIX_COL_PINS { B5, B4, E6, D7, B3, B2, B6 }
+#define MATRIX_ROW_PINS \
+    { F4, F5, F6, F7, B1 }
+#define MATRIX_COL_PINS \
+    { B5, B4, E6, D7, B3, B2, B6 }
 
 /* COL2ROW, ROW2COL */
 #define DIODE_DIRECTION COL2ROW
@@ -65,5 +67,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define RGB_DI_PIN C6
 #ifdef RGB_DI_PIN
-#define RGBLED_NUM 5 
+#    define RGBLED_N
 #endif
