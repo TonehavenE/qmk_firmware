@@ -67,5 +67,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define RGB_DI_PIN C6
 #ifdef RGB_DI_PIN
-#    define RGBLED_N
+#    define RGBLED_NUM 7
 #endif
