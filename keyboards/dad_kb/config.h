@@ -41,8 +41,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /*
  * Split Keyboard specific options, make sure you have 'SPLIT_KEYBOARD = yes' in your rules.mk, and define SOFT_SERIAL_PIN.
  */
-#define SOFT_SERIAL_PIN D0  // SHIT I ROUTED THIS TO D4
-#define MASTER_RIGHT
+#define SOFT_SERIAL_PIN D0
+#define MASTER_LEFT
 
 /* Debounce reduces chatter (unintended double-presses) - set 0 if debouncing is not needed */
 #define DEBOUNCE 5
@@ -66,6 +66,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define BOOTMAGIC_LITE_RIGHT_COLUMN 0
 
 #define RGB_DI_PIN C6
-#ifdef RGB_DI_PIN
-#    define RGBLED_NUM 7
-#endif
+#define RGBLED_NUM 7
