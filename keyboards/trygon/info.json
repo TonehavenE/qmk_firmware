@@ -11,7 +11,8 @@
         "extrakey": true,
         "mousekey": true,
         "nkro": true,
-        "keyboard_shared_ep": true
+        "keyboard_shared_ep": true,
+        "rgb_matrix": true
     },
     "matrix_pins": {
         "cols": ["A8", "B0", "A7", "A6", "A5", "B12", "B9", "B8", "B7", "B6", "B5", "B4"],

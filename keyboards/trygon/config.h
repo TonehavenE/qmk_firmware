@@ -7,6 +7,9 @@
  * Feature disable options
  *  These options are also useful to firmware size reduction.
  */
+#define RGB_DI_PIN B15
+// #define RGBLED_NUM 58
+#define DRIVER_LED_TOTAL 58
 
 /* disable debug print */
 //#define NO_DEBUG
