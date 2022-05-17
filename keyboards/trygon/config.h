@@ -10,6 +10,10 @@
 #define RGB_DI_PIN B15
 // #define RGBLED_NUM 58
 #define DRIVER_LED_TOTAL 58
+#define RGB_MATRIX_KEYPRESSES
+#define RGB_MATRIX_KEYRELEASES
+#define RGB_MATRIX_FRAMEBUFFER_EFFECTS
+#define RGB_MATRIX_DIGITAL_RAIN
 
 /* disable debug print */
 //#define NO_DEBUG
