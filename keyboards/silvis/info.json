@@ -1,6 +1,6 @@
 {
     "manufacturer": "Eben Quennevile",
-    "keyboard_name": "trygon",
+    "keyboard_name": "silvis",
     "maintainer": "TonehavenE",
     "bootloader": "stm32-dfu",
     "diode_direction": "COL2ROW",
