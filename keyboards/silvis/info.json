@@ -11,14 +11,13 @@
         "extrakey": true,
         "mousekey": true,
         "nkro": true,
-        "keyboard_shared_ep": true,
-        "rgb_matrix": true
+        "keyboard_shared_ep": true
     },
     "matrix_pins": {
         "cols": ["A8", "B0", "A7", "A6", "A5", "B12", "B9", "B8", "B7", "B6", "B5", "B4"],
-        "rows": ["A0", "A1", "A2", "A3", "A4"]
+        "rows": ["A4", "A3", "A2", "A1", "A0"]
     },
-    "processor": "STM32F401",
+    "processor": "STM32F411",
     "url": "",
     "usb": {
         "device_version": "1.0.0",
