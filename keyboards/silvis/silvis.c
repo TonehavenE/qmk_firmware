@@ -1,7 +1,7 @@
 #include "silvis.h"
 
 #ifdef RGB_MATRIX_ENABLE
-
+/* clang-format off */
 led_config_t g_led_config = {
     {
         // Key matrix to LED index
@@ -29,9 +29,9 @@ led_config_t g_led_config = {
         // LED Index to Flag
         1, 4, 4, 4, 4, 4,   4, 4, 4, 4, 4, 1,
         1, 4, 4, 4, 4, 4,   4, 4, 4, 4, 4, 1,
+        1, 4, 4, 4, 8, 4,   4, 4, 4, 4, 4, 1,
         1, 4, 4, 4, 4, 4,   4, 4, 4, 4, 4, 1,
-        1, 4, 4, 4, 4, 4,   4, 4, 4, 4, 4, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 8, 1, 1, 1, 1,
     } };
-
+/* clang-format on */
 #endif

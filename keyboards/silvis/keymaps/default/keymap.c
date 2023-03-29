@@ -27,14 +27,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [_RAISE] = LAYOUT_ortho_5x12(
         KC_GRAVE, DM_PLY1,    DM_REC1,  DM_RSTP,  _______,  _______,        _______,  KC_DEL ,  _______,  _______  ,  _______  , _______,
-        _______ , _______,    KC_7   ,  KC_8   ,  KC_9   ,  _______,        _______,  KC_HOME,  KC_UP  ,  KC_END   ,  _______  , _______,
-        _______ , KC_0   ,    KC_4   ,  KC_5   ,  KC_6   ,  _______,        _______,  KC_LEFT,  KC_DOWN,  KC_RIGHT ,  _______  , _______,
+        _______ , KC_BTN2,    KC_MS_U,  KC_BTN1,  KC_9   ,  _______,        _______,  KC_HOME,  KC_UP  ,  KC_END   ,  _______  , _______,
+        _______ , KC_MS_L,    KC_MS_D,  KC_MS_R,  KC_6   ,  _______,        _______,  KC_LEFT,  KC_DOWN,  KC_RIGHT ,  _______  , _______,
         _______ , _______,    KC_1   ,  KC_2   ,  KC_3   ,  _______,        _______,  _______,  _______,  _______  ,  _______  , _______,
                   KC_0   ,    _______,  _______,  _______,  _______,        KC_BSLS,  _______,  KC_DEL ,  TG(_GAME),  TG(_GAME)
     ),
     [_FUNC] = LAYOUT_ortho_5x12(
-        _______ , _______,    KC_F10 ,  KC_F11 ,  KC_F12 ,  _______,        RGB_TOG,  RGB_MOD,  RGB_RMOD,  _______,  _______, QK_REBOOT,
-        _______ , _______,    KC_F7  ,  KC_F8  ,  KC_F9  ,  _______,        _______,  RGB_HUI,  RGB_HUD,  _______,  _______, _______,
+        _______ , _______,    KC_F10 ,  KC_F11 ,  KC_F12 ,  _______,        RGB_TOG,  RGB_MOD,  RGB_RMOD,  _______,  _______, QK_BOOT,
+        _______ , _______,    KC_F7  ,  KC_F8  ,  KC_F9  ,  _______,        _______,  RGB_HUI,  RGB_HUD,  _______,  _______, QK_MAKE,
         _______ , KC_LGUI,    KC_F4  ,  KC_F5  ,  KC_F6  ,  _______,        _______,  RGB_SAI,  RGB_SAD,  KC_RALT,  KC_LGUI, _______,
         _______ , _______,    KC_F1  ,  KC_F2  ,  KC_F3  ,  _______,        _______,  RGB_VAI,  RGB_VAD,  _______,  _______, _______,
                   _______,    _______,  _______,  _______,  _______,        _______,  _______,  _______,  TG(_CALC),  TG(_CALC)
@@ -48,6 +48,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     )
 };
 
+#ifdef RGBLIGHT_ENABLE
 const rgblight_segment_t PROGMEM my_raise_layer[] = RGBLIGHT_LAYER_SEGMENTS(
 		{28, 1, HSV_BLUE},
 		{53, 1, HSV_BLUE}
@@ -87,4 +88,38 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 	rgblight_set_layer_state(3, layer_state_cmp(state, _CALC));
 	return state;
 };
+#endif
 /* clang-format on */
+#ifdef RGB_MATRIX_ENABLE
+void keyboard_post_init_user(void) {
+    rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+    rgb_matrix_sethsv_noeeprom(HSV_OFF);
+}
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    if (get_highest_layer(layer_state) > 0) {
+        uint8_t layer = get_highest_layer(layer_state);
+        for (uint8_t i = led_min; i < led_max; i++) {
+            if (g_led_config.flags[i] & LED_FLAG_INDICATOR) {
+                switch (layer) {
+                    case 1:
+                        rgb_matrix_set_color(i, RGB_PURPLE);
+                        break;
+                    case 2:
+                        rgb_matrix_set_color(i, RGB_BLUE);
+                        break;
+                    case 3:
+                        rgb_matrix_set_color(i, RGB_RED);
+                        break;
+                    case 4:
+                        rgb_matrix_set_color(i, RGB_YELLOW);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+#endif
