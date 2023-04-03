@@ -1,16 +1,16 @@
 #include QMK_KEYBOARD_H
 #include "combo.c"
-#include "sensor.h"
-#include "sensor.c"
 
 #define _COLEMAK 0
 #define _NAV 1
 #define _FUNC 2
 #define _NUM 3
 
+#define DEFAULT_CPI 1240
+
 #define LT_TAB LT(_NAV, KC_TAB)
 #define LT_BSPC LT(_NUM, KC_BSPC)
-//#define LT_SPC LT(_NAV, KC_SPC)
+// #define LT_SPC LT(_NAV, KC_SPC)
 #define LT_ENT LT(_FUNC, KC_ENT)
 
 #define SFT_Z LSFT_T(KC_Z)
@@ -20,7 +20,7 @@
 #define SFT_SLSH LSFT_T(KC_SLSH)
 #define KC_CM KC_COMM
 
-#define KC_RST RESET
+#define KC_RST QK_BOOT
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // clang-format off
@@ -51,13 +51,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // clang-format on
 };
 
-#ifdef CONSOLE_ENABLE
 void keyboard_post_init_user(void) {
+    pointing_device_set_cpi(DEFAULT_CPI);
     // Customise these values to desired behaviour
+#ifdef CONSOLE_ENABLE
     debug_enable = true;
-    debug_matrix = true;
-}
+    // debug_matrix = true;
 #endif
+}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // If console is enabled, it will print the matrix position and status of each key pressed
@@ -89,4 +90,21 @@ bool get_retro_tapping(uint16_t keycode, keyrecord_t *record) {
         default:
             return false;
     }
+}
+
+// when I change to the raise layer, I want my CPI to get reduced
+// by half. When I drop that layer, it needs to go back up.
+layer_state_t layer_state_set_kb(layer_state_t state) {
+    uint16_t current_cpi = pointing_device_get_cpi();
+    switch (get_highest_layer(state)) {
+        case _NAV:
+            pointing_device_set_cpi(current_cpi / 4);
+            break;
+        case _COLEMAK:
+            pointing_device_set_cpi(DEFAULT_CPI);
+            break;
+        default:
+            break;
+    }
+    return state;
 }
