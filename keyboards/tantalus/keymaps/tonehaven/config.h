@@ -6,13 +6,11 @@
 #define TAPPING_TERM_PER_KEY
 
 // Prevent normal rollover on alphas from accidentally triggering mods
-//#define IGNORE_MOD_TAP_INTERRUPT
+// #define IGNORE_MOD_TAP_INTERRUPT
 
 // Enable rapid switch from tap to hold, disables double tap hold auto-repeat
-//#define TAPPING_FORCE_HOLD
+// #define TAPPING_FORCE_HOLD
 
-#define RETRO_TAPPING
-#define RETRO_TAPPING_PER_KEY
 // Recommended for heavy chording.
 #define QMK_KEYS_PER_SCAN 4
 
