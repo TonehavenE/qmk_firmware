@@ -8,9 +8,9 @@
 #define _NAV 1
 #define _NUM 2
 #define _SYM 3
-#define NUMBERS MO(_NUM)
-#define NAVIGATION MO(_NAV)
-#define SYMBOL MO(_SYM)
+#define NUM MO(_NUM)
+#define NAV MO(_NAV)
+#define SYM MO(_SYM)
 
 // One shot keys
 #define OS_SFT OSM(MOD_LSFT)
@@ -18,43 +18,77 @@
 #define OS_ALT OSM(MOD_LALT)
 #define OS_GUI OSM(MOD_LGUI)
 
-// old
-#define LT_BSPC LT(_NUM, KC_BSPC)
-#define LT_TAB LT(_NAV, KC_TAB)
-// #define LT_SPC LT(_NAV, KC_SPC)
-#define LT_ENT LT(_FUNC, KC_ENT)
+// Shorthand
+#define TAB_LEFT S(C(KC_TAB))
+#define TAB_RIGHT C(KC_TAB)
 
-#define SFT_Z LSFT_T(KC_Z)
+#define RESET QK_BOOT
 
-#define KC_RST QK_BOOT
-
+// clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    // clang-format off
-	[_COLEMAK] = LAYOUT_TANTALUS(
-		KC_Q , KC_W , KC_F, KC_P , KC_G,   QK_OBRC QK_CBRC,  KC_J, KC_L, KC_U , KC_Y  , KC_QUOT ,
-		KC_A , KC_R , KC_S, KC_T , KC_D,   KC_SCLN, KC_MINS, KC_H, KC_N, KC_E , KC_I  , KC_O    ,
-		SFT_Z, CTL_X, KC_C, ALT_V, KC_B,    KC_K, KC_M, KC_COMM, KC_DOT, SFT_SLSH,
-			    LT_TAB, KC_SPC, LT_ENT  ,         NUMBERS
-	),
-  [_NAV] = LAYOUT_TANTALUS(
-    _______, C(KC_HOME), C(KC_UP)  , C(KC_END)  , _______, KC_RST, _______, KC_HOME, KC_UP  , KC_END  , _______,
-    KC_LGUI, C(KC_LEFT), C(KC_DOWN), C(KC_RIGHT), _______, KC_RST, _______, KC_LEFT, KC_DOWN, KC_RIGHT, _______,
-    _______, _______   , _______   , _______    , _______, KC_RST, _______, _______, _______, _______ , _______,
-                                _______, _______, _______, KC_RST,          KC_DEL
-    ),
-  [_FUNC] = LAYOUT_TANTALUS(
-     KC_F12, KC_F7, KC_F8, KC_F9, _______, KC_RST, _______, _______, _______, _______, _______,
-     KC_F11, KC_F4, KC_F5, KC_F6, _______, KC_RST, _______, KC_RSFT, KC_RCTL, KC_RALT, KC_RGUI,
-     KC_F10, KC_F1, KC_F2, KC_F3, _______, KC_RST, _______, _______, _______, _______, _______,
-                _______, _______, _______, KC_RST,          _______
-    ),
-  [_NUM] = LAYOUT_TANTALUS(
-    S(KC_1), S(KC_2), S(KC_3), S(KC_4), S(KC_5), _______, S(KC_6), S(KC_7), S(KC_8), S(KC_9), S(KC_0),
-    KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , _______, KC_6   , KC_7   , KC_8   , KC_9   , KC_0   ,
-    _______, _______, _______, _______, _______, _______, KC_EQL , KC_EQL , KC_SLSH, S(KC_8), KC_MINS,
-                      _______, _______, _______, _______,          _______
-    )
-    // clang-format on
+[_COLEMAK] = LAYOUT_split(
+//        ┌───┬───┬───┬─────┬─────┬──────┐       ┌─────┬─────┬───┬───┬───┬─────┐
+//        │ q │ w │ f │  p  │  g  │ ([{  │       │ )]} │  j  │ l │ u │ y │ "'" │
+//        ├───┼───┼───┼─────┼─────┼──────┤       ├─────┼─────┼───┼───┼───┼─────┤
+//        │ a │ r │ s │  t  │  d  │  ;   │       │  -  │  h  │ n │ e │ i │  o  │
+//        ├───┼───┼───┼─────┼─────┼──────┘       └─────┼─────┼───┼───┼───┼─────┤
+//        │ z │ x │ c │  v  │  b  │                    │  k  │ m │ , │ . │  /  │
+//        └───┴───┴───┼─────┼─────┼──────┐             ├─────┼───┴───┴───┴─────┘
+//                    │ NAV │ spc │ lsft │             │ NUM │
+//                    └─────┴─────┴──────┘             └─────┘
+      KC_Q , KC_W , KC_F , KC_P , KC_G   , QK_OBRC ,         QK_CBRC , KC_J , KC_L , KC_U    , KC_Y   , KC_QUOT    ,
+      KC_A , KC_R , KC_S , KC_T , KC_D   , KC_SCLN ,         KC_MINS , KC_H , KC_N , KC_E    , KC_I   , KC_O       ,
+      KC_Z , KC_X , KC_C , KC_V , KC_B   ,                             KC_K , KC_M , KC_COMM , KC_DOT , KC_SLSH    ,
+                           NAV  , KC_SPC , KC_LSFT ,                   NUM
+),
+
+[_NAV] = LAYOUT_split(
+//        ┌────────┬────────┬──────────┬───────────┬──────┬─────┐       ┌─────┬─────┬──────┬──────┬──────┬──────┐
+//        │  tab   │        │          │           │ volu │     │       │     │ ins │ home │  up  │ end  │ bspc │
+//        ├────────┼────────┼──────────┼───────────┼──────┼─────┤       ├─────┼─────┼──────┼──────┼──────┼──────┤
+//        │ OS_SFT │ OS_CTL │  OS_ALT  │  OS_GUI   │ vold │     │       │     │     │ left │ down │ rght │ del  │
+//        ├────────┼────────┼──────────┼───────────┼──────┼─────┘       └─────┼─────┼──────┼──────┼──────┼──────┤
+//        │        │        │ TAB_LEFT │ TAB_RIGHT │      │                   │     │ pgdn │ pgup │      │ ent  │
+//        └────────┴────────┴──────────┼───────────┼──────┼─────┐             ├─────┼──────┴──────┴──────┴──────┘
+//                                     │           │      │     │             │ SYM │
+//                                     └───────────┴──────┴─────┘             └─────┘
+      KC_TAB  , _______ , _______  , _______   , KC_VOLU , _______ ,         _______ , KC_INSERT , KC_HOME , KC_UP   , KC_END   , KC_BSPC     ,
+      OS_SFT  , OS_CTL  , OS_ALT   , OS_GUI    , KC_VOLD , _______ ,         _______ , _______   , KC_LEFT , KC_DOWN , KC_RIGHT , KC_DEL      ,
+      _______ , _______ , TAB_LEFT , TAB_RIGHT , _______ ,                             _______   , KC_PGDN , KC_PGUP , _______  , KC_ENTER    ,
+                                     _______   , _______ , _______ ,                   SYM
+),
+
+[_NUM] = LAYOUT_split(
+//        ┌────────┬────────┬────────┬────────┬──────┬─────┐       ┌─────┬─────┬────────┬────────┬────────┬────────┐
+//        │   1    │   2    │   3    │   4    │  5   │     │       │     │  6  │   7    │   8    │   9    │   0    │
+//        ├────────┼────────┼────────┼────────┼──────┼─────┤       ├─────┼─────┼────────┼────────┼────────┼────────┤
+//        │ OS_SFT │ OS_CTL │ OS_ALT │ OS_GUI │  f6  │     │       │     │ f12 │ OS_GUI │ OS_ALT │ OS_CTL │ OS_SFT │
+//        ├────────┼────────┼────────┼────────┼──────┼─────┘       └─────┼─────┼────────┼────────┼────────┼────────┤
+//        │   f1   │   f2   │   f3   │   f4   │  f5  │                   │ f11 │  f10   │   f9   │   f8   │   f7   │
+//        └────────┴────────┴────────┼────────┼──────┼─────┐             ├─────┼────────┴────────┴────────┴────────┘
+//                                   │  SYM   │ bspc │  0  │             │     │
+//                                   └────────┴──────┴─────┘             └─────┘
+      KC_1   , KC_2   , KC_3   , KC_4   , KC_5    , _______ ,         _______ , KC_6    , KC_7   , KC_8   , KC_9   , KC_0      ,
+      OS_SFT , OS_CTL , OS_ALT , OS_GUI , KC_F6   , _______ ,         _______ , KC_F12  , OS_GUI , OS_ALT , OS_CTL , OS_SFT    ,
+      KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5   ,                             KC_F11  , KC_F10 , KC_F9  , KC_F8  , KC_F7     ,
+                                 SYM    , KC_BSPC , KC_0    ,                   _______
+),
+
+[_SYM] = LAYOUT_split(
+//        ┌─────┬───┬───┬─────┬─────┬──────┐       ┌──────┬──────┬────────┬────────┬────────┬────────┐
+//        │ esc │ [ │ { │  (  │  ~  │ boot │       │ boot │  ^   │   )    │   }    │   ]    │   `    │
+//        ├─────┼───┼───┼─────┼─────┼──────┤       ├──────┼──────┼────────┼────────┼────────┼────────┤
+//        │  -  │ * │ = │  _  │  $  │ boot │       │ boot │ '--' │ OS_GUI │ OS_ALT │ OS_CTL │ OS_SFT │
+//        ├─────┼───┼───┼─────┼─────┼──────┘       └──────┼──────┼────────┼────────┼────────┼────────┤
+//        │  +  │ | │ @ │  /  │  %  │                     │      │  '\'   │   &    │   ?    │   !    │
+//        └─────┴───┴───┼─────┼─────┼──────┐              ├──────┼────────┴────────┴────────┴────────┘
+//                      │     │     │      │              │      │
+//                      └─────┴─────┴──────┘              └──────┘
+      KC_ESC  , KC_LBRC , KC_LCBR  , KC_LPRN , KC_TILDE  , RESET   ,         RESET , KC_CIRC , KC_RPRN , KC_RCBR , KC_RBRC , KC_GRAVE    ,
+      KC_MINS , KC_ASTR , KC_EQUAL , KC_UNDS , KC_DOLLAR , RESET   ,         RESET , KC_HASH , OS_GUI  , OS_ALT  , OS_CTL  , OS_SFT      ,
+      KC_PLUS , KC_PIPE , KC_AT    , KC_SLSH , KC_PERC   ,                           _______ , KC_BSLS , KC_AMPR , KC_QUES , KC_EXLM     ,
+                                     _______ , _______   , _______ ,                 _______
+)
 };
 
 void keyboard_post_init_user(void) {
@@ -72,19 +106,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     uprintf("KL: kc: 0x%04X, col: %u, row: %u, pressed: %b, time: %u, interrupt: %b, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
 #endif
     return true;
-}
-
-uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case SFT_Z:
-            return TAPPING_TERM;
-        case CTL_X:
-            return TAPPING_TERM + 1000;
-        case ALT_V:
-            return TAPPING_TERM + 1000;
-        default:
-            return TAPPING_TERM;
-    }
 }
 
 // when I change to the raise layer, I want my CPI to get reduced
