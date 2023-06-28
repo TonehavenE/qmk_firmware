@@ -9,30 +9,30 @@
  */
 
 /* disable debug print */
-//#define NO_DEBUG
+// #define NO_DEBUG
 
 /* disable print */
-//#define NO_PRINT
+// #define NO_PRINT
 
 /*rdisable action features */
-//#define NO_ACTION_LAYER
-//#define NO_ACTION_TAPPING
-//#define NO_ACTION_ONESHOT
+// #define NO_ACTION_LAYER
+// #define NO_ACTION_TAPPING
+// #define NO_ACTION_ONESHOT
 #define MATRIX_ROWS 8
 #define MATRIX_COLS 6
-
+#define SPLIT_HAND_PIN B8
+#define USB_VBUS_PIN A15
 #define SERIAL_USART_TX_PIN B6
-/*
-#define DIRECT_PINS {\
-    {B10, B11, C9, C12, D2, B5},\
-    {B0, B2, C8, C11, B3, B7},\
-    {C4, C5, C7, C10, B4, B9},\
-    {NO_PIN, NO_PIN, NO_PIN, C13, C14, C15}\
-}
-#define DIRECT_PINS_RIGHT {\
-    {NO_PIN, C15, C3, A2, B2, B12},\
-    {NO_PIN, C14, C2, A1, B10, B13},\
-    {NO_PIN, C13, C1, A0, B11, B14},\
-    {C11, C12, D2, NO_PIN, NO_PIN, NO_PIN}\
-}
-*/
+
+#ifdef RGB_MATRIX_ENABLE
+#    define RGB_MATRIX_MAXIMUM_BRIGHTNESS 128
+#    define RGB_MATRIX_LED_COUNT 39
+#    define RGB_MATRIX_SPLIT \
+        { 21, 18 }
+#    define SPLIT_TRANSPORT_MIRROR
+#    define WS2812_PWM_DRIVER PWMD3
+#    define WS2812_PWM_CHANNEL 1
+#    define WS2812_PWM_PAL_MODE 1
+#    define WS2812_DMA_STREAM STM32_DMA1_STREAM1
+#    define WS2812_DMA_CHANNEL 4
+#endif
