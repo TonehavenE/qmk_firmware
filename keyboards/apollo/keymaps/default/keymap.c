@@ -30,7 +30,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_NAVIGATION] = LAYOUT_split_3x6_3(
 //    ┌─────┬─────────┬──────┬──────┬───────┬──────┐               ┌──────┬──────┬──────┬──────┬──────┐
-//    │     │  mute   │ btn1 │ ms_u │ btn2  │ mply │               │ pgup │ home │  up  │ end  │ del  │
+//    │  `  │  mute   │ btn1 │ ms_u │ btn2  │ mply │               │ pgup │ home │  up  │ end  │ del  │
 //    ├─────┼─────────┼──────┼──────┼───────┼──────┤               ├──────┼──────┼──────┼──────┼──────┤
 //    │     │ QK_LEAD │ ms_l │ ms_d │ ms_r  │ volu │               │ pgdn │ left │ down │ rght │ bspc │
 //    ├─────┼─────────┼──────┼──────┼───────┼──────┤               ├──────┼──────┼──────┼──────┼──────┤
@@ -38,10 +38,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //    └─────┴─────────┴──────┴──────┼───────┼──────┼─────┐   ┌─────┼──────┼──────┼──────┴──────┴──────┘
 //                                  │       │      │     │   │     │      │ NUM  │
 //                                  └───────┴──────┴─────┘   └─────┴──────┴──────┘
-  _______ , KC_MUTE , KC_MS_BTN1 , KC_MS_U , KC_MS_BTN2 , KC_MPLY ,                         KC_PGUP , KC_HOME   , KC_UP   , KC_END   , KC_DEL ,
-  _______ , QK_LEAD , KC_MS_L    , KC_MS_D , KC_MS_R    , KC_VOLU ,                         KC_PGDN , KC_LEFT   , KC_DOWN , KC_RIGHT , KC_BSPC,
-  _______ , _______ , KC_CUT     , KC_COPY , KC_PASTE   , _______ ,                         KC_PSCR , KC_INSERT , _______ , _______  , _______,
-                                             _______    , _______ , _______ ,     _______ , _______ , NUM
+  KC_GRAVE , KC_MUTE , KC_MS_BTN1 , KC_MS_U , KC_MS_BTN2 , KC_MPLY ,                         KC_PGUP , KC_HOME   , KC_UP   , KC_END   , KC_DEL ,
+  _______  , QK_LEAD , KC_MS_L    , KC_MS_D , KC_MS_R    , KC_VOLU ,                         KC_PGDN , KC_LEFT   , KC_DOWN , KC_RIGHT , KC_BSPC,
+  _______  , _______ , KC_CUT     , KC_COPY , KC_PASTE   , _______ ,                         KC_PSCR , KC_INSERT , _______ , _______  , _______,
+                                              _______    , _______ , _______ ,     _______ , _______ , NUM
 ),
 
 [_SYMBOL] = LAYOUT_split_3x6_3(
@@ -124,30 +124,29 @@ void leader_end_user(void) {
     }
     // Lighting / RGB controls
     else if (leader_sequence_two_keys(KC_L, KC_T)) {
-        tap_code16(RGB_TOG);
+        rgb_matrix_toggle();
     }
     else if (leader_sequence_two_keys(KC_L, KC_N)) {
-        tap_code16(RGB_MOD);
+        rgb_matrix_step();
     }
     else if (leader_sequence_two_keys(KC_L, KC_P)) {
-        tap_code16(RGB_RMOD);
+        rgb_matrix_step_reverse();
     }
     else if (leader_sequence_two_keys(KC_L, KC_U)) {
-        tap_code16(RGB_VAI);
+        rgb_matrix_increase_val();
     }
     else if (leader_sequence_two_keys(KC_L, KC_D)) {
-        tap_code16(RGB_VAD);
+        rgb_matrix_decrease_val();
     }
     // Open Applications
     else if (leader_sequence_two_keys(KC_O, KC_C)) {
         tap_code16(KC_CALC);
     }
     else if (leader_sequence_two_keys(KC_O, KC_N)) {
-        tap_code_delay(KC_LGUI, 500);
-        SEND_STRING("obsidian" SS_TAP(X_ENTER));
+        SEND_STRING(SS_DOWN(X_LGUI) SS_DELAY(1000) SS_UP(X_LGUI) "obsidian" SS_DELAY(500) SS_TAP(X_ENT));
     }
     else if (leader_sequence_two_keys(KC_O, KC_B)) {
-        tap_code_delay(KC_LGUI, 500);
+        tap_code_delay(KC_LGUI, 0000);
         SEND_STRING("firefox" SS_TAP(X_ENTER));
     }
     // Email
