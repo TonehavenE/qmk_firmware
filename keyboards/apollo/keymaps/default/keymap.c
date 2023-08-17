@@ -36,12 +36,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //    ├─────┼─────────┼──────┼──────┼───────┼──────┤               ├──────┼──────┼──────┼──────┼──────┤
 //    │     │         │ cut  │ copy │ paste │      │               │ pscr │ ins  │      │      │      │
 //    └─────┴─────────┴──────┴──────┼───────┼──────┼─────┐   ┌─────┼──────┼──────┼──────┴──────┴──────┘
-//                                  │       │      │     │   │     │      │ NUM  │
+//                                  │       │      │     │   │     │      │      │
+//                                  │       │      │     │   │     │      │      │
 //                                  └───────┴──────┴─────┘   └─────┴──────┴──────┘
   KC_GRAVE , KC_MUTE , KC_MS_BTN1 , KC_MS_U , KC_MS_BTN2 , KC_MPLY ,                         KC_PGUP , KC_HOME   , KC_UP   , KC_END   , KC_DEL ,
   _______  , QK_LEAD , KC_MS_L    , KC_MS_D , KC_MS_R    , KC_VOLU ,                         KC_PGDN , KC_LEFT   , KC_DOWN , KC_RIGHT , KC_BSPC,
   _______  , _______ , KC_CUT     , KC_COPY , KC_PASTE   , _______ ,                         KC_PSCR , KC_INSERT , _______ , _______  , _______,
-                                              _______    , _______ , _______ ,     _______ , _______ , NUM
+                                              _______    , _______ , _______ ,     _______ , _______ , _______
 ),
 
 [_SYMBOL] = LAYOUT_split_3x6_3(
@@ -52,31 +53,34 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //    ├─────┼───────────────┼───────────────┼───┼─────┼─────┤                ├─────┼─────┼───┼───┼──────┤
 //    │     │ OSM(MOD_LALT) │ OSM(MOD_LGUI) │ + │  /  │  ?  │                │  |  │  \  │ < │ > │  :   │
 //    └─────┴───────────────┴───────────────┴───┼─────┼─────┼──────┐   ┌─────┼─────┼─────┼───┴───┴──────┘
-//                                              │ NUM │     │ bspc │   │ del │     │     │
+//                                              │     │     │ bspc │   │ del │     │     │
 //                                              └─────┴─────┴──────┘   └─────┴─────┴─────┘
   _______ , KC_EXLM       , KC_AT         , KC_HASH , KC_DLR  , KC_PERC ,                        KC_CIRC , KC_AMPR , KC_ASTR , KC_EQL  , KC_BSPC ,
   _______ , KC_GRV        , KC_TILDE      , KC_LPRN , KC_LBRC , KC_LCBR ,                        KC_RCBR , KC_RBRC , KC_RPRN , KC_UNDS , KC_MINS ,
   _______ , OSM(MOD_LALT) , OSM(MOD_LGUI) , KC_PLUS , KC_SLSH , KC_QUES ,                        KC_PIPE , KC_BSLS , KC_LT   , KC_GT   , KC_COLON,
-                                                      NUM     , _______ , KC_BSPC ,     KC_DEL , _______ , _______
+                                                      _______ , _______ , KC_BSPC ,     KC_DEL , _______ , _______
 ),
 
 [_NUM] = LAYOUT_split_3x6_3(
-//    ┌─────┬─────┬─────┬─────┬─────┬─────┐                       ┌─────┬─────┬─────┬─────┬─────┐
-//    │     │ f1  │ f2  │ f3  │ f4  │ f5  │                       │ f6  │ f7  │ f8  │ f9  │ f10 │
-//    ├─────┼─────┼─────┼─────┼─────┼─────┤                       ├─────┼─────┼─────┼─────┼─────┤
-//    │     │  1  │  2  │  3  │  4  │  5  │                       │  6  │  7  │  8  │  9  │  0  │
-//    ├─────┼─────┼─────┼─────┼─────┼─────┤                       ├─────┼─────┼─────┼─────┼─────┤
-//    │     │     │     │     │     │ f11 │                       │ f12 │     │     │     │     │
-//    └─────┴─────┴─────┴─────┼─────┼─────┼─────────┐   ┌─────────┼─────┼─────┼─────┴─────┴─────┘
-//                            │ SYM │ spc │ QK_BOOT │   │ QK_BOOT │     │     │
-//                            └─────┴─────┴─────────┘   └─────────┴─────┴─────┘
-  _______ , KC_F1   , KC_F2   , KC_F3   , KC_F4   , KC_F5  ,                         KC_F6   , KC_F7   , KC_F8   , KC_F9   , KC_F10 ,
-  _______ , KC_1    , KC_2    , KC_3    , KC_4    , KC_5   ,                         KC_6    , KC_7    , KC_8    , KC_9    , KC_0   ,
-  _______ , _______ , _______ , _______ , _______ , KC_F11 ,                         KC_F12  , _______ , _______ , _______ , _______,
-                                          SYM     , KC_SPC , QK_BOOT ,     QK_BOOT , _______ , _______
+//    ┌─────┬─────┬───┬───┬─────┬─────┐                       ┌─────┬─────┬────┬────┬──────┐
+//    │     │ spc │ 7 │ 8 │  9  │ f12 │                       │ f6  │ f7  │ f8 │ f9 │ bspc │
+//    ├─────┼─────┼───┼───┼─────┼─────┤                       ├─────┼─────┼────┼────┼──────┤
+//    │     │  0  │ 4 │ 5 │  6  │ f11 │                       │ f1  │ f2  │ f3 │ f4 │  f5  │
+//    ├─────┼─────┼───┼───┼─────┼─────┤                       ├─────┼─────┼────┼────┼──────┤
+//    │     │  +  │ 1 │ 2 │  3  │ f10 │                       │ f12 │  =  │ ,  │ .  │  -   │
+//    └─────┴─────┴───┴───┼─────┼─────┼─────────┐   ┌─────────┼─────┼─────┼────┴────┴──────┘
+//                        │     │ spc │ QK_BOOT │   │ QK_BOOT │     │     │
+//                        └─────┴─────┴─────────┘   └─────────┴─────┴─────┘
+  _______ , KC_SPC  , KC_7 , KC_8 , KC_9    , KC_F12 ,                         KC_F6   , KC_F7   , KC_F8   , KC_F9  , KC_BSPC,
+  _______ , KC_0    , KC_4 , KC_5 , KC_6    , KC_F11 ,                         KC_F1   , KC_F2   , KC_F3   , KC_F4  , KC_F5  ,
+  _______ , KC_PLUS , KC_1 , KC_2 , KC_3    , KC_F10 ,                         KC_F12  , KC_EQL  , KC_COMM , KC_DOT , KC_MINS,
+                                    _______ , KC_SPC , QK_BOOT ,     QK_BOOT , _______ , _______
 )
 };
 
+layer_state_t layer_state_set_user(layer_state_t state) {
+   return update_tri_layer_state(state, _NAVIGATION, _SYMBOL, _NUM);
+}
 void keyboard_post_init_user(void) {
     // debug_enable = true;
     // debug_matrix = true;
@@ -94,10 +98,32 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 void leader_end_user(void) {
     // Text editing
     if (leader_sequence_two_keys(KC_D, KC_W)) {
+        // delete word
         SEND_STRING(SS_LCTL(SS_TAP(X_BSPC)));
     }
     else if (leader_sequence_two_keys(KC_D, KC_N)) {
+        // delete next
         SEND_STRING(SS_LCTL(SS_TAP(X_DEL)));
+    }
+    else if (leader_sequence_two_keys(KC_G, KC_H)) {
+        // go home
+        SEND_STRING(SS_LCTL(SS_TAP(X_HOME)));
+    }
+    else if (leader_sequence_two_keys(KC_G, KC_E)) {
+        // go end
+        SEND_STRING(SS_LCTL(SS_TAP(X_END)));
+    }
+    else if (leader_sequence_two_keys(KC_S, KC_A)) {
+        // select all
+        SEND_STRING(SS_LCTL(SS_LSFT("a")));
+    }
+    else if (leader_sequence_two_keys(KC_S, KC_N)) {
+        // select next
+        SEND_STRING(SS_LCTL(SS_LSFT(SS_TAP(X_RIGHT))));
+    }
+    else if (leader_sequence_two_keys(KC_S, KC_P)) {
+        // select previous
+        SEND_STRING(SS_LCTL(SS_LSFT(SS_TAP(X_LEFT))));
     }
     // Tabs
     else if (leader_sequence_two_keys(KC_C, KC_T)) {
@@ -142,19 +168,22 @@ void leader_end_user(void) {
     else if (leader_sequence_two_keys(KC_O, KC_C)) {
         tap_code16(KC_CALC);
     }
-    else if (leader_sequence_two_keys(KC_O, KC_N)) {
-        SEND_STRING(SS_DOWN(X_LGUI) SS_DELAY(1000) SS_UP(X_LGUI) "obsidian" SS_DELAY(500) SS_TAP(X_ENT));
-    }
-    else if (leader_sequence_two_keys(KC_O, KC_B)) {
-        tap_code_delay(KC_LGUI, 0000);
-        SEND_STRING("firefox" SS_TAP(X_ENTER));
-    }
     // Email
-
     else if (leader_sequence_two_keys(KC_E, KC_S)) {
         SEND_STRING("student.equenneville@gmail.com");
     }
     else if (leader_sequence_two_keys(KC_E, KC_P)) {
         SEND_STRING("tonehaven@outlook.com");
+    }
+    else if (leader_sequence_two_keys(KC_P, KC_P)) {
+        SEND_STRING("(603) 484-0402");
+    }
+    else if (leader_sequence_two_keys(KC_P, KC_H)) {
+        SEND_STRING("(603) 262-5730");
+    }
+
+    // YAML Frontmatter
+    else if (leader_sequence_two_keys(KC_F, KC_M)) {
+        SEND_STRING("---" SS_TAP(X_ENTER) "tags: " SS_TAP(X_ENTER) "---" SS_TAP(X_UP) SS_TAP(X_END));
     }
 }
