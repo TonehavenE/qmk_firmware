@@ -13,19 +13,19 @@
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_COLEMAK] = LAYOUT_split_3x6_3(
-//    ┌─────────┬───────────┬───┬───┬─────┬─────┐               ┌─────────┬─────┬───┬───┬───────────┐
-//    │ QK_GESC │     q     │ w │ f │  p  │  g  │               │    j    │  l  │ u │ y │     '     │
-//    ├─────────┼───────────┼───┼───┼─────┼─────┤               ├─────────┼─────┼───┼───┼───────────┤
-//    │  lsft   │     a     │ r │ s │  t  │  d  │               │    h    │  n  │ e │ i │     o     │
-//    ├─────────┼───────────┼───┼───┼─────┼─────┤               ├─────────┼─────┼───┼───┼───────────┤
-//    │  lctl   │ LALT_T(z) │ x │ c │  v  │  b  │               │    k    │  m  │ , │ . │ LGUI_T(;) │
-//    └─────────┴───────────┴───┴───┼─────┼─────┼─────┐   ┌─────┼─────────┼─────┼───┴───┴───────────┘
-//                                  │ NAV │ spc │ tab │   │ ent │ QK_LEAD │ SYM │
-//                                  └─────┴─────┴─────┘   └─────┴─────────┴─────┘
-  QK_GESC , KC_Q         , KC_W , KC_F , KC_P , KC_G   ,                       KC_J    , KC_L , KC_U    , KC_Y   , KC_QUOT        ,
-  KC_LSFT , KC_A         , KC_R , KC_S , KC_T , KC_D   ,                       KC_H    , KC_N , KC_E    , KC_I   , KC_O           ,
-  KC_LCTL , LALT_T(KC_Z) , KC_X , KC_C , KC_V , KC_B   ,                       KC_K    , KC_M , KC_COMM , KC_DOT , LGUI_T(KC_SCLN),
-                                         NAV  , KC_SPC , KC_TAB ,     KC_ENT , QK_LEAD , SYM
+//    ┌─────────┬───────────┬───┬───┬─────┬─────┐                       ┌──────┬─────┬───┬───┬───────────┐
+//    │ QK_GESC │     q     │ w │ f │  p  │  g  │                       │  j   │  l  │ u │ y │     '     │
+//    ├─────────┼───────────┼───┼───┼─────┼─────┤                       ├──────┼─────┼───┼───┼───────────┤
+//    │  lsft   │     a     │ r │ s │  t  │  d  │                       │  h   │  n  │ e │ i │     o     │
+//    ├─────────┼───────────┼───┼───┼─────┼─────┤                       ├──────┼─────┼───┼───┼───────────┤
+//    │  lctl   │ LALT_T(z) │ x │ c │  v  │  b  │                       │  k   │  m  │ , │ . │ LGUI_T(;) │
+//    └─────────┴───────────┴───┴───┼─────┼─────┼─────────────┐   ┌─────┼──────┼─────┼───┴───┴───────────┘
+//                                  │ NAV │ spc │ LCTL_T(tab) │   │ ent │ lsft │ SYM │
+//                                  └─────┴─────┴─────────────┘   └─────┴──────┴─────┘
+  QK_GESC , KC_Q         , KC_W , KC_F , KC_P , KC_G   ,                               KC_J    , KC_L , KC_U    , KC_Y   , KC_QUOT        ,
+  KC_LSFT , KC_A         , KC_R , KC_S , KC_T , KC_D   ,                               KC_H    , KC_N , KC_E    , KC_I   , KC_O           ,
+  KC_LCTL , LALT_T(KC_Z) , KC_X , KC_C , KC_V , KC_B   ,                               KC_K    , KC_M , KC_COMM , KC_DOT , LGUI_T(KC_SCLN),
+                                         NAV  , KC_SPC , LCTL_T(KC_TAB) ,     KC_ENT , KC_LSFT , SYM
 ),
 
 [_NAVIGATION] = LAYOUT_split_3x6_3(
