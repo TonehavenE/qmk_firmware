@@ -5,6 +5,7 @@
 #define _RAISE 2
 #define _FUNC 3
 #define _CALC 4
+#define _QWERTY 5
 
 #define RAISE MO(_RAISE)
 #define LT_FUNC LT(_FUNC, KC_ENT)
@@ -33,7 +34,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                   KC_0   ,    _______,  _______,  _______,  _______,        KC_BSLS,  _______,  KC_DEL ,  TG(_GAME),  TG(_GAME)
     ),
     [_FUNC] = LAYOUT_ortho_5x12(
-        _______ , _______,    KC_F10 ,  KC_F11 ,  KC_F12 ,  _______,        RGB_TOG,  RGB_MOD,  RGB_RMOD, RGB_M_P,  RGB_M_B, QK_BOOT,
+        _______ , _______,    KC_F10 ,  KC_F11 ,  KC_F12 ,  TG(_QWERTY),        RGB_TOG,  RGB_MOD,  RGB_RMOD, RGB_M_P,  RGB_M_B, QK_BOOT,
         _______ , _______,    KC_F7  ,  KC_F8  ,  KC_F9  ,  _______,        _______,  RGB_HUI,  RGB_HUD,  RGB_M_SW, RGB_M_R, QK_MAKE,
         _______ , KC_LGUI,    KC_F4  ,  KC_F5  ,  KC_F6  ,  _______,        _______,  RGB_SAI,  RGB_SAD,  KC_RALT,  KC_LGUI, EE_CLR,
         _______ , _______,    KC_F1  ,  KC_F2  ,  KC_F3  ,  _______,        _______,  RGB_VAI,  RGB_VAD,  _______,  _______, _______,
@@ -45,7 +46,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______ , _______,    KC_4   ,  KC_5   ,  KC_6   ,  _______,        _______,  _______,  _______,  _______,  _______, _______,
         _______ , KC_COMM,    KC_1   ,  KC_2   ,  KC_3   ,  _______,        _______,  _______,  _______,  _______,  _______, _______,
                   KC_0   ,    KC_DOT ,  KC_SPC ,  KC_ENT ,  KC_TAB ,        KC_DEL ,  _______,  KC_BSPC,  TG(_CALC),  TG(_CALC)
-    )
+    ),
+    [_QWERTY] = LAYOUT_ortho_5x12(
+        QK_GESC, KC_1,    KC_2,    KC_3 ,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,      KC_EQL,
+        KC_LALT, KC_Q,    KC_W,    KC_E ,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,   KC_QUOT,
+        KC_LSFT, KC_A,    KC_S,    KC_D ,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN,      KC_BSLS,
+        KC_LCTL, KC_Z,    KC_X,    KC_C ,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,   KC_MINS,
+                 KC_LPRN, KC_RPRN, RAISE,    KC_SPC,  KC_TAB,  KC_LGUI, LT_FUNC, KC_BSPC, KC_LBRC, KC_RBRC
+    ),
 };
 
 #ifdef RGBLIGHT_ENABLE
